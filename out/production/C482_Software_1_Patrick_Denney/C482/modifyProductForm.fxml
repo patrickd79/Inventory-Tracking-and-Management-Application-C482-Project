@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="C482.ModifyProductFormController">
+    <children>
+        <BorderPane layoutX="338.0" layoutY="206.0" prefHeight="500.0" prefWidth="760.0" style="-fx-background-radius: 5; -fx-border-style: solid; -fx-border-radius: 5;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <top>
+                <HBox alignment="CENTER" prefHeight="50.0" prefWidth="760.0" BorderPane.alignment="CENTER_RIGHT">
+                    <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="300.0">
+                            <children>
+                                <Label text="Modify Product">
+                                    <font>
+                                        <Font name="Arial Black" size="14.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="50.0" prefWidth="440.0">
+                            <children>
+                                <TextField fx:id="modProductSearch" promptText="Search by Part ID or Name">
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="250.0" top="10.0" />
+                                    </VBox.margin>
+                                </TextField>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </top>
+            <left>
+                <VBox prefHeight="400.0" prefWidth="325.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <HBox prefHeight="100.0" prefWidth="350.0">
+                            <children>
+                                <Label text="ID">
+                                    <HBox.margin>
+                                        <Insets left="20.0" top="50.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <TextField fx:id="modProductIDInput" prefHeight="25.0" prefWidth="141.0">
+                                    <HBox.margin>
+                                        <Insets bottom="10.0" left="38.0" top="50.0" />
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="45.0" prefWidth="350.0">
+                            <children>
+                                <Label text="Name">
+                                    <HBox.margin>
+                                        <Insets left="20.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <TextField fx:id="modProductNameInput" prefHeight="25.0" prefWidth="90.0">
+                                    <HBox.margin>
+                                        <Insets left="17.0" />
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="45.0" prefWidth="350.0">
+                            <children>
+                                <Label text="Inv">
+                                    <HBox.margin>
+                                        <Insets left="20.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <TextField fx:id="modProductInvInput" prefHeight="25.0" prefWidth="90.0">
+                                    <HBox.margin>
+                                        <Insets left="33.5" />
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="45.0" prefWidth="350.0">
+                            <children>
+                                <Label text="Price">
+                                    <HBox.margin>
+                                        <Insets left="20.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <TextField fx:id="modProductPriceInput" prefHeight="25.0" prefWidth="90.0">
+                                    <HBox.margin>
+                                        <Insets left="22.5" />
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="45.0" prefWidth="350.0">
+                            <children>
+                                <Label text="Max">
+                                    <HBox.margin>
+                                        <Insets left="20.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <TextField fx:id="modProductMaxInput" prefHeight="25.0" prefWidth="90.0">
+                                    <HBox.margin>
+                                        <Insets left="26.5" />
+                                    </HBox.margin>
+                                </TextField>
+                                <Label text="Min">
+                                    <HBox.margin>
+                                        <Insets left="15.0" />
+                                    </HBox.margin>
+                                </Label>
+                                <TextField fx:id="modProductMinInput" prefHeight="25.0" prefWidth="90.0">
+                                    <HBox.margin>
+                                        <Insets left="15.0" />
+                                    </HBox.margin>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="175.0" prefWidth="350.0" />
+                    </children>
+                </VBox>
+            </left>
+            <bottom>
+                <HBox alignment="CENTER_RIGHT" prefHeight="52.0" prefWidth="758.0">
+                    <children>
+                        <Button fx:id="modPRodSaveBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="60.0" text="Save">
+                            <HBox.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </HBox.margin>
+                        </Button>
+                        <Button fx:id="modProdCancelBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="69.0" text="Cancel">
+                            <HBox.margin>
+                                <Insets bottom="5.0" left="40.0" right="40.0" top="5.0" />
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                </HBox>
+            </bottom>
+            <right>
+                <VBox prefHeight="400.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="200.0" style="-fx-background-color: #ede0dd#ede0dd;">
+                            <children>
+                                <TableView prefHeight="175.0" prefWidth="359.0" HBox.hgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="modProdPartIDTableAdd" prefWidth="57.0" text="Part ID" />
+                                        <TableColumn fx:id="modProdPartNameTableAdd" prefWidth="76.0" text="Part Name" />
+                                        <TableColumn fx:id="modProdInvLevelTableAdd" prefWidth="114.0" text="Inventory Level" />
+                                        <TableColumn fx:id="modProdPriceTableAdd" prefWidth="178.0" text="Price/Cost per Unit" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0">
+                            <children>
+                                <Button fx:id="modProdAddBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="59.0" text="Add">
+                                    <HBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="40.0" top="5.0" />
+                                    </HBox.margin>
+                                </Button>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="175.0" prefWidth="200.0" style="-fx-background-color: #dddded#dddded;">
+                            <children>
+                                <TableView prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="modProdPartIDTableRemove" prefWidth="59.0" text="Part ID" />
+                                        <TableColumn fx:id="modProdPartNameTableRemove" prefWidth="83.0" text="Part Name" />
+                                        <TableColumn fx:id="modProdInvLevelRemove" prefWidth="107.0" text="Inventory Level" />
+                                        <TableColumn fx:id="modProdPriceTableRemove" prefWidth="176.0" text="Price/Cost per Unit" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="57.0" prefWidth="350.0">
+                            <children>
+                                <Button fx:id="modProdRemoveBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="170.0" text="Remove Associated Part">
+                                    <HBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="40.0" top="5.0" />
+                                    </HBox.margin>
+                                    <padding>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </padding>
+                                </Button>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </right>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </BorderPane>
+    </children>
+</AnchorPane>
