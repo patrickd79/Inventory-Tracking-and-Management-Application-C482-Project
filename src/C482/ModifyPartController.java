@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -31,6 +32,96 @@ public class ModifyPartController {
     public TextField modPartMaxInput;
     @FXML
     public TextField modPartMinInput;
+    @FXML
+    public Label machineIDCompNameLabel;
+    private final int partID = MainFormController.modId;
+
+
+
+
+    private void isInHousePart(int id) {
+        int index = -1;
+        for (Part part : Inventory.getAllParts()) {
+            index++;
+            if (part.getId() == id) {
+                if (part instanceof InHouse) {
+                    modPartInHouseRadio.setSelected(true);
+                }else{
+                    modPartOutsourcedRadio.setSelected(true);
+                    machineIDCompNameLabel.setText("Company Name");
+
+                }
+            }
+
+        }
+    }
+
+    private void setNameField(int id) {
+        int index = -1;
+        for (Part part : Inventory.getAllParts()) {
+            index++;
+            if (part.getId() == id) {
+                modPartNameInput.setText(part.getName());
+            }
+        }
+    }
+
+    private void setInvLvlField(int id) {
+        int index = -1;
+        for (Part part : Inventory.getAllParts()) {
+            index++;
+            if (part.getId() == id) {
+                modPartInvInput.setText(String.valueOf(part.getStock()));
+            }
+        }
+    }
+
+    private void setPriceField(int id) {
+        int index = -1;
+        for (Part part : Inventory.getAllParts()) {
+            index++;
+            if (part.getId() == id) {
+                modPartCostInput.setText(String.valueOf(part.getPrice()));
+            }
+        }
+    }
+    private void setMaxField(int id) {
+        int index = -1;
+        for (Part part : Inventory.getAllParts()) {
+            index++;
+            if (part.getId() == id) {
+                modPartMaxInput.setText(String.valueOf(part.getMax()));
+            }
+        }
+    }
+    private void setMinField(int id) {
+        int index = -1;
+        for (Part part : Inventory.getAllParts()) {
+            index++;
+            if (part.getId() == id) {
+                modPartMinInput.setText(String.valueOf(part.getMin()));
+
+            }
+        }
+    }
+
+    private void setMachineIdField(int id) {
+        int index = -1;
+        for (Part part : Inventory.getAllParts()) {
+            index++;
+            if (part.getId() == id) {
+                if(part instanceof InHouse) {
+                    modPartMachineIDInput.setText(String.valueOf(((InHouse) part).getMachineID()));
+                }else{
+                    modPartMachineIDInput.setText(String.valueOf(((Outsourced) part).getCompanyName()));
+
+                }
+            }
+        }
+    }
+
+
+
 
     public void openMainForm(ActionEvent event) throws IOException {
         Parent mainWindow = FXMLLoader.load(getClass().getResource("mainForm.fxml"));
@@ -50,5 +141,17 @@ public class ModifyPartController {
             }
         }
         return false;
+    }
+
+    public void initialize(){
+        isInHousePart(partID);
+        modifyPartIDInput.setText(String.valueOf(partID));
+        setNameField(partID);
+        setInvLvlField(partID);
+        setPriceField(partID);
+        setMaxField(partID);
+        setMinField(partID);
+        setMachineIdField(partID);
+
     }
 }

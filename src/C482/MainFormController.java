@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -38,20 +37,9 @@ public class MainFormController {
     private TableColumn<Product, Integer> productInvLevelColumn;
     @FXML
     private TableColumn<Product, Double> productPriceColumn;
-    @FXML
-    private Button productPanelAddBtn;
-    @FXML
-    private Button productPanelModBtn;
-    @FXML
-    private Button productPanelDeleteBtn;
-    @FXML
-    private Button exitApplicationBtn;
-    @FXML
-    private Button addPanelDeleteBtn;
-    @FXML
-    private Button partsPanelAddBtn;
-    @FXML
-    private Button partsPanelModBtn;
+    public static int modId;
+
+
 
     public void initialize(){
             mainPartsTable.setItems(Inventory.getAllParts());
@@ -68,6 +56,15 @@ public class MainFormController {
             productInvLevelColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
             productPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
             mainProductsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+    }
+    public int partToModify(){
+        ObservableList<Part> selectedPart;
+
+        selectedPart = mainPartsTable.getSelectionModel().getSelectedItems();
+        for(Part part: selectedPart) {
+            modId = part.getId();
+        }
+        return modId;
     }
 
    public void deleteSelectedPart(){
@@ -115,6 +112,7 @@ public class MainFormController {
     }
 
     public void openModPartForm(ActionEvent event) throws IOException {
+        partToModify();
         Parent modPartWindow = FXMLLoader.load(getClass().getResource("modifyPartForm.fxml"));
         Scene modPartScene = new Scene(modPartWindow);
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
