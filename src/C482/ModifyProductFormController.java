@@ -1,14 +1,18 @@
 package C482;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -30,72 +34,62 @@ public class ModifyProductFormController {
     @FXML
     private TextField modProductMinInput;
     @FXML
-    private TableView<Product> modProdAllPartsTable;
+    private TableView<Part> modProdAllPartsTable;
     @FXML
-    private TableColumn<Product, Integer> modProdAllPartsIDCol;
+    private TableColumn<Part, Integer> modProdAllPartsIDCol;
     @FXML
-    private TableColumn<Product, String> modProdAllPArtsNAmeCol;
+    private TableColumn<Part, String> modProdAllPArtsNAmeCol;
     @FXML
-    private TableColumn<Product, Integer> modProdAllPartsInvCol;
+    private TableColumn<Part, Integer> modProdAllPartsInvCol;
     @FXML
-    private TableColumn<Product, Double> modProdAllPartsPriceCol;
+    private TableColumn<Part, Double> modProdAllPartsPriceCol;
     @FXML
-    private TableView<Product> modProdAssociatedPartsTable;
+    private TableView<Part> modProdAssociatedPartsTable;
     @FXML
-    private TableColumn<Product, Integer> modProdAssociatedPartsIDCol;
+    private TableColumn<Part, Integer> modProdAssociatedPartsIDCol;
     @FXML
-    private TableColumn<Product, String> modProdAssociatedPartsNameCol;
+    private TableColumn<Part, String> modProdAssociatedPartsNameCol;
     @FXML
-    private TableColumn<Product, Integer> modProdAssociatedPartsInvCol;
+    private TableColumn<Part, Integer> modProdAssociatedPartsInvCol;
     @FXML
-    private TableColumn<Product, Double> modProdAssociatedPriceCol;
+    private TableColumn<Part, Double> modProdAssociatedPriceCol;
     private final int prodID = MainFormController.prodModId;
+    public Product thisProduct = Inventory.lookupProduct(prodID);
+    public ObservableList<Part> pendingAssociatedParts = thisProduct.getAllAssociatedParts();
+    public ObservableList<Part> tempAssociatedParts = FXCollections.observableArrayList();
+    public Product newProduct;
 
-    private void setNameField(int id) {
-        int index = -1;
-        for (Product product : Inventory.getAllProducts()) {
-            index++;
-            if (product.getId() == id) {
-                modProductNameInput.setText(product.getName());
-            }
+
+
+    public void addAssociatedParts(ActionEvent event) throws IOException{
+        ObservableList<Part> selectedPart;
+        selectedPart = modProdAllPartsTable.getSelectionModel().getSelectedItems();
+        for(Part part:selectedPart) {
+            thisProduct.addAssociatedPart(part);
         }
     }
-    private void setPriceField(int id) {
-        int index = -1;
-        for (Product product : Inventory.getAllProducts()) {
-            index++;
-            if (product.getId() == id) {
-                modProductPriceInput.setText(String.valueOf(product.getPrice()));
-            }
+    public void removeAssociatedParts(ActionEvent event) throws IOException {
+        ObservableList<Part> selectedPartForRemove;
+        selectedPartForRemove = modProdAssociatedPartsTable.getSelectionModel().getSelectedItems();
+        for (Part part : selectedPartForRemove) {
+            thisProduct.deleteAssociatedPart(part);
         }
     }
-    private void setInvLvlField(int id) {
-        int index = -1;
-        for (Product product : Inventory.getAllProducts()) {
-            index++;
-            if (product.getId() == id) {
-                modProductInvInput.setText(String.valueOf(product.getStock()));
-            }
+    private void setNameField(Product thisProduct) {
+            modProductNameInput.setText(thisProduct.getName());
         }
-    }
-    private void setMinField(int id) {
-        int index = -1;
-        for (Product product : Inventory.getAllProducts()) {
-            index++;
-            if (product.getId() == id) {
-                modProductMinInput.setText(String.valueOf(product.getMin()));
-            }
+    private void setPriceField(Product thisProduct) {
+            modProductPriceInput.setText(String.valueOf(thisProduct.getPrice()));
         }
-    }
-    private void setMaxField(int id) {
-        int index = -1;
-        for (Product product : Inventory.getAllProducts()) {
-            index++;
-            if (product.getId() == id) {
-                modProductMaxInput.setText(String.valueOf(product.getMax()));
-            }
+    private void setInvLvlField(Product thisProduct) {
+            modProductInvInput.setText(String.valueOf(thisProduct.getStock()));
         }
-    }
+    private void setMinField(Product thisProduct) {
+            modProductMinInput.setText(String.valueOf(thisProduct.getMin()));
+        }
+    private void setMaxField(Product thisProduct) {
+            modProductMaxInput.setText(String.valueOf(thisProduct.getMax()));
+        }
     public void openMainForm(ActionEvent event) throws IOException {
         Parent mainWindow = FXMLLoader.load(getClass().getResource("mainForm.fxml"));
         Scene mainScene = new Scene(mainWindow);
@@ -112,35 +106,55 @@ public class ModifyProductFormController {
         double prodPrice = Double.parseDouble(modProductPriceInput.getText().trim());
         int prodMin = Integer.parseInt(modProductMinInput.getText().trim());
         int prodMax = Integer.parseInt(modProductMaxInput.getText().trim());
-        return new Product(prodID,
+         newProduct= new Product(prodID,
                 prodName,
                 prodPrice,
                 prodStockNum,
                 prodMin,
                 prodMax);
+         return newProduct;
     }
     public int findProductIndex(int id){
         int index = -1;
         for(Product product: Inventory.getAllProducts()) {
             if (product.getId() == id) {
                 index = Inventory.getAllProducts().indexOf(product);
-
             }
         }
         return index;
     }
     public void saveModifiedProduct(ActionEvent event) throws IOException {
-        Inventory.updateProduct(findProductIndex(prodID), getChangedProd());
+        tempAssociatedParts.addAll(pendingAssociatedParts);
+        getChangedProd();
+        Inventory.updateProduct(findProductIndex(prodID), newProduct);
+        for(Part part:tempAssociatedParts){
+            newProduct.addAssociatedPart(part);
+        }
         openMainForm(event);
     }
-    public void initialize() {
+    public void initialize(){
         modProductIDInput.setText(String.valueOf(prodID));
-        setNameField(prodID);
-        setInvLvlField(prodID);
-        setPriceField(prodID);
-        setMaxField(prodID);
-        setMinField(prodID);
+        setNameField(thisProduct);
+        setInvLvlField(thisProduct);
+        setPriceField(thisProduct);
+        setMaxField(thisProduct);
+        setMinField(thisProduct);
 
-    }
+        modProdAllPartsTable.setItems(Inventory.getAllParts());
+        modProdAllPartsIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        modProdAllPArtsNAmeCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        modProdAllPartsInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        modProdAllPartsPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        modProdAllPartsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-}
+
+        modProdAssociatedPartsTable.setItems(pendingAssociatedParts);
+        modProdAssociatedPartsIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        modProdAssociatedPartsNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        modProdAssociatedPartsInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        modProdAssociatedPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        modProdAssociatedPartsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        }
+
+        }

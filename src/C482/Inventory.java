@@ -18,8 +18,15 @@ public class Inventory {
 
     }
     public static Product lookupProduct(int productId){
-        return null;
-
+        Product thisProduct = null;
+        int index = -1;
+        for (Product product : allProducts) {
+            index++;
+            if (product.getId() == productId) {
+                thisProduct = product;
+            }
+        }
+        return thisProduct;
     }
     public static ObservableList<Part> lookupPart(String partName){
         return null;

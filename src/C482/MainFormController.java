@@ -67,6 +67,15 @@ public class MainFormController {
         }
         return partModId;
     }
+    public int productToModify(){
+        ObservableList<Product> selectedProduct;
+
+        selectedProduct = mainProductsTable.getSelectionModel().getSelectedItems();
+        for(Product product: selectedProduct) {
+            prodModId = product.getId();
+        }
+        return prodModId;
+    }
 
    public void deleteSelectedPart(){
         ObservableList<Part> selectedPart, allParts;
@@ -123,6 +132,7 @@ public class MainFormController {
     }
 
     public void openModProductForm(ActionEvent event) throws IOException {
+        productToModify();
         Parent modProductWindow = FXMLLoader.load(getClass().getResource("modifyProductForm.fxml"));
         Scene modProductScene = new Scene(modProductWindow);
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();

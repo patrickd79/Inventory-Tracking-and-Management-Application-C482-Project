@@ -52,12 +52,19 @@ public class AddProductFormController {
     @FXML
     private TextField addProdMinInput;
     public int productID = 0;
-    ObservableList<Part> pendingAssociatedParts = FXCollections.observableArrayList();
+    public ObservableList<Part> pendingAssociatedParts = FXCollections.observableArrayList();
 
-    public void stageAssociatedParts(ActionEvent event) throws IOException{
+
+    public void addAssociatedParts(ActionEvent event) throws IOException{
         ObservableList<Part> selectedParts;
         selectedParts = addProdPartsAllPartsTable.getSelectionModel().getSelectedItems();
         pendingAssociatedParts.addAll(selectedParts);
+
+    }
+    public void removeAssociatedParts(ActionEvent event) throws IOException {
+        ObservableList<Part> selectedPartForRemove;
+        selectedPartForRemove = addProdAssociatedPartsTable.getSelectionModel().getSelectedItems();
+        pendingAssociatedParts.removeAll(selectedPartForRemove);
 
     }
     public int highestProdID(){
@@ -87,20 +94,31 @@ public class AddProductFormController {
     public void cancelBtn(ActionEvent event) throws IOException{
         openMainForm(event);
     }
-    public void addProduct(ActionEvent event) throws IOException{
+    public void addNewProd(ActionEvent event) throws IOException{
+        Product product;
         String prodName = addProdNameInput.getText().trim();
         int prodStockNum = Integer.parseInt(addProdInvInput.getText().trim());
         double prodPrice = Double.parseDouble(addProdPriceInput.getText().trim());
         int prodMin = Integer.parseInt(addProdMinInput.getText().trim());
         int prodMax = Integer.parseInt(addProdMaxInput.getText().trim());
-        Inventory.addProduct(new Product(productIDGenerator(),
+       product = new Product(productIDGenerator(),
                 prodName,
                 prodPrice,
                 prodStockNum,
                 prodMin,
-                prodMax));
-        openMainForm(event);
+                prodMax);
+       Inventory.addProduct(product);
+       for(Part part: pendingAssociatedParts) {
+           product.addAssociatedPart(part);
+       }
+       openMainForm(event);
+
+        System.out.println(product.getAllAssociatedParts());
+        System.out.println(product.getId());
     }
+
+
+
     public void initialize(){
         addProdPartsAllPartsTable.setItems(Inventory.getAllParts());
         addProdAllPartsIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));

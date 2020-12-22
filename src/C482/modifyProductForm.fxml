@@ -159,7 +159,7 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0">
                             <children>
-                                <Button fx:id="modProdAddBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="59.0" text="Add">
+                                <Button fx:id="modProdAddBtn" mnemonicParsing="false" onAction="#addAssociatedParts" prefHeight="35.0" prefWidth="59.0" text="Add">
                                     <HBox.margin>
                                         <Insets bottom="5.0" left="5.0" right="40.0" top="5.0" />
                                     </HBox.margin>
@@ -180,7 +180,7 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" prefHeight="57.0" prefWidth="350.0">
                             <children>
-                                <Button fx:id="modProdRemoveBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="170.0" text="Remove Associated Part">
+                                <Button fx:id="modProdRemoveBtn" mnemonicParsing="false" onAction="#removeAssociatedParts" prefHeight="35.0" prefWidth="170.0" text="Remove Associated Part">
                                     <HBox.margin>
                                         <Insets bottom="5.0" left="5.0" right="40.0" top="5.0" />
                                     </HBox.margin>
