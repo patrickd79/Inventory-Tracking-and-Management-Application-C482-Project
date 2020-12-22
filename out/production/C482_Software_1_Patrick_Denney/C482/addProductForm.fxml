@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="C482.AddProductFormController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="C482.AddProductFormController">
    <children>
       <BorderPane layoutX="338.0" layoutY="206.0" prefHeight="500.0" prefWidth="760.0" style="-fx-background-radius: 5; -fx-border-style: solid; -fx-border-radius: 5;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <top>
@@ -50,10 +49,13 @@
                               <Insets left="20.0" top="50.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="addProdIDInput" prefHeight="25.0" prefWidth="141.0">
+                        <TextField fx:id="addProdIDInput" editable="false" prefHeight="25.0" prefWidth="141.0" style="-fx-background-color: #e5e5e5; -fx-border-color: #d5d5d5; -fx-border-radius: 3; -fx-background-radius: 3;" text="Auto-Gen Disabled">
                            <HBox.margin>
                               <Insets bottom="10.0" left="38.0" top="50.0" />
                            </HBox.margin>
+                           <font>
+                              <Font name="Arial Italic" size="13.0" />
+                           </font>
                         </TextField>
                      </children>
                   </HBox>
@@ -130,12 +132,12 @@
          <bottom>
             <HBox alignment="CENTER_RIGHT" prefHeight="52.0" prefWidth="758.0">
                <children>
-                  <Button fx:id="addProdSaveBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="60.0" text="Save">
+                  <Button fx:id="addProdSaveBtn" mnemonicParsing="false" onAction="#addProduct" prefHeight="35.0" prefWidth="60.0" text="Save">
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="addProdCancelBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="69.0" text="Cancel">
+                  <Button fx:id="addProdCancelBtn" mnemonicParsing="false" onAction="#cancelBtn" prefHeight="35.0" prefWidth="69.0" text="Cancel">
                      <HBox.margin>
                         <Insets bottom="5.0" left="40.0" right="40.0" top="5.0" />
                      </HBox.margin>
@@ -148,19 +150,19 @@
                <children>
                   <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="200.0" style="-fx-background-color: #ede0dd#ede0dd;">
                      <children>
-                        <TableView prefHeight="175.0" prefWidth="359.0" HBox.hgrow="ALWAYS">
+                        <TableView fx:id="addProdPartsAllPartsTable" prefHeight="175.0" prefWidth="359.0" HBox.hgrow="ALWAYS">
                           <columns>
-                            <TableColumn fx:id="addProdPartIDTableAdd" prefWidth="57.0" text="Part ID" />
-                            <TableColumn fx:id="addProdPartNameTableAdd" prefWidth="76.0" text="Part Name" />
-                              <TableColumn fx:id="addProdInvLevelTableAdd" prefWidth="114.0" text="Inventory Level" />
-                              <TableColumn fx:id="addProdPriceTableAdd" prefWidth="178.0" text="Price/Cost per Unit" />
+                            <TableColumn fx:id="addProdAllPartsIDCol" prefWidth="57.0" text="Part ID" />
+                            <TableColumn fx:id="addProdAllPartsNameCol" prefWidth="76.0" text="Part Name" />
+                              <TableColumn fx:id="addProdAllPartsInvCol" prefWidth="114.0" text="Inventory Level" />
+                              <TableColumn fx:id="addProdAllPartsPriceCol" prefWidth="178.0" text="Price/Cost per Unit" />
                           </columns>
                         </TableView>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="addProdAddBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="59.0" text="Add">
+                        <Button fx:id="addProdAddBtn" mnemonicParsing="false" onAction="#stageAssociatedParts" prefHeight="35.0" prefWidth="59.0" text="Add">
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="40.0" top="5.0" />
                            </HBox.margin>
@@ -169,12 +171,12 @@
                   </HBox>
                   <HBox prefHeight="175.0" prefWidth="200.0" style="-fx-background-color: #dddded#dddded;">
                      <children>
-                        <TableView prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                        <TableView fx:id="addProdAssociatedPartsTable" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                           <columns>
-                            <TableColumn fx:id="addProdPartIDTableRemove" prefWidth="59.0" text="Part ID" />
-                            <TableColumn fx:id="addProdPartNameTableRemove" prefWidth="83.0" text="Part Name" />
-                              <TableColumn fx:id="addProdInvLevelTableRemove" prefWidth="107.0" text="Inventory Level" />
-                              <TableColumn fx:id="addProdPriceTableRemove" prefWidth="176.0" text="Price/Cost per Unit" />
+                            <TableColumn fx:id="addProdAssociatedPartsIDCol" prefWidth="59.0" text="Part ID" />
+                            <TableColumn fx:id="addProdAssociatedPartsNameCol" prefWidth="83.0" text="Part Name" />
+                              <TableColumn fx:id="addProdAssociatedPartsInvCol" prefWidth="107.0" text="Inventory Level" />
+                              <TableColumn fx:id="addProdAssociatedPartsPriceCol" prefWidth="176.0" text="Price/Cost per Unit" />
                           </columns>
                         </TableView>
                      </children>

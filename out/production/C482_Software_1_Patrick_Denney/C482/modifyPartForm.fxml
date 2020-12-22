@@ -28,7 +28,7 @@
                                 <Font name="Arial Black" size="14.0" />
                             </font>
                         </Label>
-                        <RadioButton fx:id="modPartInHouseRadio" mnemonicParsing="false" text="In-House">
+                        <RadioButton fx:id="modPartInHouseRadio" mnemonicParsing="false" onAction="#changeTypeOfPart" text="In-House">
                             <HBox.margin>
                                 <Insets left="60.0" top="20.0" />
                             </HBox.margin>
@@ -39,7 +39,7 @@
                         <ToggleGroup fx:id="ModifyGroup" />
                      </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="modPartOutsourcedRadio" mnemonicParsing="false" text="Outsourced" toggleGroup="$ModifyGroup">
+                        <RadioButton fx:id="modPartOutsourcedRadio" mnemonicParsing="false" onAction="#changeTypeOfPart" text="Outsourced" toggleGroup="$ModifyGroup">
                             <HBox.margin>
                                 <Insets bottom="20.0" left="50.0" right="20.0" top="20.0" />
                             </HBox.margin>
@@ -56,7 +56,7 @@
                                 <Insets left="20.0" />
                             </HBox.margin>
                         </Label>
-                        <TextField fx:id="modifyPartIDInput" editable="false" style="-fx-background-color: #e5e5e5; -fx-border-color: #d5d5d5; -fx-background-radius: 3; -fx-border-radius: 3;">
+                        <TextField fx:id="modifyPartIDInput" editable="false" style="-fx-background-color: #e5e5e5; -fx-border-color: #d5d5d5; -fx-background-radius: 3; -fx-border-radius: 3;" text="Auto-Gen Disabled">
                             <HBox.margin>
                                 <Insets left="68.0" />
                             </HBox.margin>
@@ -142,7 +142,7 @@
                     </children></HBox>
                 <HBox alignment="TOP_RIGHT" prefHeight="296.0" prefWidth="500.0">
                     <children>
-                        <Button fx:id="modPartSaveBtn" mnemonicParsing="false" text="Save">
+                        <Button fx:id="modPartSaveBtn" mnemonicParsing="false" onAction="#saveModifiedPart" text="Save">
                             <HBox.margin>
                                 <Insets right="20.0" top="30.0" />
                             </HBox.margin>
