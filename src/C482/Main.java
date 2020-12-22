@@ -22,8 +22,11 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        InHouse defaultPart = new InHouse(0,"default part",1.00,1,1,2, 1);
-        Inventory.addPart(defaultPart);
+
         launch(args);
     }
+
+
+
+
 }

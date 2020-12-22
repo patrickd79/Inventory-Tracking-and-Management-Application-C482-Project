@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #e5e5e5;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="C482.ModifyProductFormController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="C482.ModifyProductFormController">
     <children>
         <BorderPane layoutX="338.0" layoutY="206.0" prefHeight="500.0" prefWidth="760.0" style="-fx-background-radius: 5; -fx-border-style: solid; -fx-border-radius: 5;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
             <top>
@@ -49,7 +49,7 @@
                                         <Insets left="20.0" top="50.0" />
                                     </HBox.margin>
                                 </Label>
-                                <TextField fx:id="modProductIDInput" prefHeight="25.0" prefWidth="141.0">
+                                <TextField fx:id="modProductIDInput" editable="false" prefHeight="25.0" prefWidth="141.0" style="-fx-background-color: #e5e5e5; -fx-border-color: #d5d5d5; -fx-border-radius: 3; -fx-background-radius: 3;">
                                     <HBox.margin>
                                         <Insets bottom="10.0" left="38.0" top="50.0" />
                                     </HBox.margin>
@@ -129,12 +129,12 @@
             <bottom>
                 <HBox alignment="CENTER_RIGHT" prefHeight="52.0" prefWidth="758.0">
                     <children>
-                        <Button fx:id="modPRodSaveBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="60.0" text="Save">
+                        <Button fx:id="modPRodSaveBtn" mnemonicParsing="false" onAction="#saveModifiedProduct" prefHeight="35.0" prefWidth="60.0" text="Save">
                             <HBox.margin>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </HBox.margin>
                         </Button>
-                        <Button fx:id="modProdCancelBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="69.0" text="Cancel">
+                        <Button fx:id="modProdCancelBtn" mnemonicParsing="false" onAction="#cancelBtn" prefHeight="35.0" prefWidth="69.0" text="Cancel">
                             <HBox.margin>
                                 <Insets bottom="5.0" left="40.0" right="40.0" top="5.0" />
                             </HBox.margin>
@@ -147,12 +147,12 @@
                     <children>
                         <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="200.0" style="-fx-background-color: #ede0dd#ede0dd;">
                             <children>
-                                <TableView prefHeight="175.0" prefWidth="359.0" HBox.hgrow="ALWAYS">
+                                <TableView fx:id="modProdAllPartsTable" prefHeight="175.0" prefWidth="359.0" HBox.hgrow="ALWAYS">
                                     <columns>
-                                        <TableColumn fx:id="modProdPartIDTableAdd" prefWidth="57.0" text="Part ID" />
-                                        <TableColumn fx:id="modProdPartNameTableAdd" prefWidth="76.0" text="Part Name" />
-                                        <TableColumn fx:id="modProdInvLevelTableAdd" prefWidth="114.0" text="Inventory Level" />
-                                        <TableColumn fx:id="modProdPriceTableAdd" prefWidth="178.0" text="Price/Cost per Unit" />
+                                        <TableColumn fx:id="modProdAllPartsIDCol" prefWidth="57.0" text="Part ID" />
+                                        <TableColumn fx:id="modProdAllPArtsNAmeCol" prefWidth="76.0" text="Part Name" />
+                                        <TableColumn fx:id="modProdAllPartsInvCol" prefWidth="114.0" text="Inventory Level" />
+                                        <TableColumn fx:id="modProdAllPartsPriceCol" prefWidth="178.0" text="Price/Cost per Unit" />
                                     </columns>
                                 </TableView>
                             </children>
@@ -168,12 +168,12 @@
                         </HBox>
                         <HBox prefHeight="175.0" prefWidth="200.0" style="-fx-background-color: #dddded#dddded;">
                             <children>
-                                <TableView prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                <TableView fx:id="modProdAssociatedPartsTable" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                                     <columns>
-                                        <TableColumn fx:id="modProdPartIDTableRemove" prefWidth="59.0" text="Part ID" />
-                                        <TableColumn fx:id="modProdPartNameTableRemove" prefWidth="83.0" text="Part Name" />
-                                        <TableColumn fx:id="modProdInvLevelRemove" prefWidth="107.0" text="Inventory Level" />
-                                        <TableColumn fx:id="modProdPriceTableRemove" prefWidth="176.0" text="Price/Cost per Unit" />
+                                        <TableColumn fx:id="modProdAssociatedPartsIDCol" prefWidth="59.0" text="Part ID" />
+                                        <TableColumn fx:id="modProdAssociatedPartsNameCol" prefWidth="83.0" text="Part Name" />
+                                        <TableColumn fx:id="modProdAssociatedPartsInvCol" prefWidth="107.0" text="Inventory Level" />
+                                        <TableColumn fx:id="modProdAssociatedPriceCol" prefWidth="176.0" text="Price/Cost per Unit" />
                                     </columns>
                                 </TableView>
                             </children>

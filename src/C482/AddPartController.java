@@ -75,7 +75,6 @@ public class AddPartController<event> {
         partMax = Integer.parseInt(addPartMaxInput.getText().trim());
         machineID = Integer.parseInt(addPartMachineIDInput.getText().trim());
         Inventory.addPart(new InHouse(partIDGenerator(), partName, partPrice, stockNum, partMin, partMax, machineID));
-        System.out.println(Inventory.getAllParts().get(0));
     }
 
     public void addOutsourcedPart() {

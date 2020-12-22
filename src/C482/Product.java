@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
  *
  * @author Patrick Denney
  */
-public abstract class Product {
+public class Product {
     private ObservableList<Part> associatedParts;
     private int id;
     private String name;

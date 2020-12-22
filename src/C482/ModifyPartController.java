@@ -10,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class ModifyPartController {
@@ -29,30 +28,43 @@ public class ModifyPartController {
     @FXML
     private TextField modPartMachineIDInput;
     @FXML
-    public TextField modPartMaxInput;
+    private TextField modPartMaxInput;
     @FXML
-    public TextField modPartMinInput;
+    private TextField modPartMinInput;
     @FXML
-    public Label machineIDCompNameLabel;
-    private final int partID = MainFormController.modId;
+    private Label machineIDCompNameLabel;
 
+    private final int partID = MainFormController.partModId;
 
-
-
-    private void isInHousePart(int id) {
+    public boolean inHouse(int id){
         int index = -1;
         for (Part part : Inventory.getAllParts()) {
             index++;
             if (part.getId() == id) {
                 if (part instanceof InHouse) {
-                    modPartInHouseRadio.setSelected(true);
-                }else{
-                    modPartOutsourcedRadio.setSelected(true);
-                    machineIDCompNameLabel.setText("Company Name");
-
+                    return true;
                 }
             }
+        }
+        return false;
+    }
 
+    private void isInHousePart(int id) {
+        if (inHouse(id)) {
+            modPartInHouseRadio.setSelected(true);
+        } else {
+            modPartOutsourcedRadio.setSelected(true);
+            machineIDCompNameLabel.setText("Company Name");
+
+        }
+    }
+
+    @FXML
+    private void changeTypeOfPart(ActionEvent event){
+        if(modPartInHouseRadio.isSelected()){
+            machineIDCompNameLabel.setText("Machine ID");
+        }else{
+            machineIDCompNameLabel.setText("Company Name");
         }
     }
 
@@ -85,6 +97,7 @@ public class ModifyPartController {
             }
         }
     }
+
     private void setMaxField(int id) {
         int index = -1;
         for (Part part : Inventory.getAllParts()) {
@@ -94,6 +107,7 @@ public class ModifyPartController {
             }
         }
     }
+
     private void setMinField(int id) {
         int index = -1;
         for (Part part : Inventory.getAllParts()) {
@@ -120,9 +134,6 @@ public class ModifyPartController {
         }
     }
 
-
-
-
     public void openMainForm(ActionEvent event) throws IOException {
         Parent mainWindow = FXMLLoader.load(getClass().getResource("mainForm.fxml"));
         Scene mainScene = new Scene(mainWindow);
@@ -131,16 +142,45 @@ public class ModifyPartController {
         window.show();
 
     }
-    public boolean modifyPart(int id, Part changedPart){
+
+    public Part getChangedPart(){
+        Part part;
+        if(modPartInHouseRadio.isSelected()) {
+            String partName = modPartNameInput.getText().trim();
+            int stockNum = Integer.parseInt(modPartInvInput.getText().trim());
+            double partPrice = Double.parseDouble(modPartCostInput.getText().trim());
+            int partMin = Integer.parseInt(modPartMinInput.getText().trim());
+            int partMax = Integer.parseInt(modPartMaxInput.getText().trim());
+            int machineID = Integer.parseInt(modPartMachineIDInput.getText().trim());
+            part = new InHouse(partID, partName, partPrice,stockNum,partMin, partMax, machineID);
+
+        }else{
+            String partName = modPartNameInput.getText().trim();
+            int stockNum = Integer.parseInt(modPartInvInput.getText().trim());
+            double partPrice = Double.parseDouble(modPartCostInput.getText().trim());
+            int partMin = Integer.parseInt(modPartMinInput.getText().trim());
+            int partMax = Integer.parseInt(modPartMaxInput.getText().trim());
+            String companyName = modPartMachineIDInput.getText().trim();
+            part = new Outsourced(partID, partName, partPrice,stockNum,partMin, partMax, companyName);
+
+        }
+        return part;
+    }
+
+    public int findPartIndex(int id){
         int index = -1;
-        for(Part part: Inventory.getAllParts()){
-            index++;
-            if(part.getId() == id){
-                Inventory.getAllParts().set(index, changedPart);
-                return true;
+        for(Part part: Inventory.getAllParts()) {
+            if (part.getId() == id) {
+                index = Inventory.getAllParts().indexOf(part);
+
             }
         }
-        return false;
+        return index;
+    }
+
+    public void saveModifiedPart(ActionEvent event) throws IOException {
+        Inventory.updatePart(findPartIndex(partID), getChangedPart());
+        openMainForm(event);
     }
 
     public void initialize(){
@@ -154,4 +194,6 @@ public class ModifyPartController {
         setMachineIdField(partID);
 
     }
+
+
 }

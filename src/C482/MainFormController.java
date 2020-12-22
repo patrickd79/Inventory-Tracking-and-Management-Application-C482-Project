@@ -37,7 +37,9 @@ public class MainFormController {
     private TableColumn<Product, Integer> productInvLevelColumn;
     @FXML
     private TableColumn<Product, Double> productPriceColumn;
-    public static int modId;
+    public static int partModId;
+    public static int prodModId;
+
 
 
 
@@ -47,7 +49,6 @@ public class MainFormController {
             partNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
             partInvLevelColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
             partPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-            deletePart(0);
             mainPartsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
             mainProductsTable.setItems(Inventory.getAllProducts());
@@ -62,9 +63,9 @@ public class MainFormController {
 
         selectedPart = mainPartsTable.getSelectionModel().getSelectedItems();
         for(Part part: selectedPart) {
-            modId = part.getId();
+            partModId = part.getId();
         }
-        return modId;
+        return partModId;
     }
 
    public void deleteSelectedPart(){
@@ -145,6 +146,17 @@ public class MainFormController {
             index++;
             if(part.getId() == id){
                 Inventory.getAllParts().remove(part.getId());
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean deleteProd(int id){
+        int index = -1;
+        for(Product product: Inventory.getAllProducts()){
+            index++;
+            if(product.getId() == id){
+                Inventory.getAllProducts().remove(product.getId());
                 return true;
             }
         }
