@@ -28,7 +28,7 @@
                                 <Font name="Arial Black" size="14.0" />
                             </font>
                         </Label>
-                        <RadioButton fx:id="modPartInHouseRadio" mnemonicParsing="false" onAction="#changeTypeOfPart" text="In-House">
+                        <RadioButton fx:id="inHouseRadio" mnemonicParsing="false" onAction="#changeTypeOfPart" text="In-House">
                             <HBox.margin>
                                 <Insets left="60.0" top="20.0" />
                             </HBox.margin>
@@ -39,7 +39,7 @@
                         <ToggleGroup fx:id="ModifyGroup" />
                      </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="modPartOutsourcedRadio" mnemonicParsing="false" onAction="#changeTypeOfPart" text="Outsourced" toggleGroup="$ModifyGroup">
+                        <RadioButton fx:id="outsourcedRadio" mnemonicParsing="false" onAction="#changeTypeOfPart" text="Outsourced" toggleGroup="$ModifyGroup">
                             <HBox.margin>
                                 <Insets bottom="20.0" left="50.0" right="20.0" top="20.0" />
                             </HBox.margin>
@@ -56,7 +56,7 @@
                                 <Insets left="20.0" />
                             </HBox.margin>
                         </Label>
-                        <TextField fx:id="modifyPartIDInput" editable="false" style="-fx-background-color: #e5e5e5; -fx-border-color: #d5d5d5; -fx-background-radius: 3; -fx-border-radius: 3;" text="Auto-Gen Disabled">
+                        <TextField fx:id="iDInput" editable="false" style="-fx-background-color: #e5e5e5; -fx-border-color: #d5d5d5; -fx-background-radius: 3; -fx-border-radius: 3;" text="Auto-Gen Disabled">
                             <HBox.margin>
                                 <Insets left="68.0" />
                             </HBox.margin>
@@ -72,7 +72,7 @@
                                 <Insets left="20.0" />
                             </HBox.margin>
                         </Label>
-                        <TextField fx:id="modPartNameInput">
+                        <TextField fx:id="nameInput" promptText="Part name">
                             <HBox.margin>
                                 <Insets left="47.0" />
                             </HBox.margin>
@@ -85,7 +85,7 @@
                                 <Insets left="20.0" />
                             </HBox.margin>
                         </Label>
-                        <TextField fx:id="modPartInvInput">
+                        <TextField fx:id="inventoryInput" promptText="Whole number">
                             <HBox.margin>
                                 <Insets left="63.5" />
                             </HBox.margin>
@@ -98,7 +98,7 @@
                                 <Insets left="20.0" />
                             </HBox.margin>
                         </Label>
-                        <TextField fx:id="modPartCostInput">
+                        <TextField fx:id="priceInput" promptText="Decimal number">
                             <HBox.margin>
                                 <Insets left="23.0" />
                             </HBox.margin>
@@ -111,7 +111,7 @@
                                 <Insets left="20.0" />
                             </HBox.margin>
                         </Label>
-                        <TextField fx:id="modPartMaxInput">
+                        <TextField fx:id="maxInput" promptText="Whole number">
                             <HBox.margin>
                                 <Insets left="56.5" />
                             </HBox.margin>
@@ -121,7 +121,7 @@
                                 <Insets left="30.0" />
                             </HBox.margin>
                         </Label>
-                        <TextField fx:id="modPartMinInput" prefHeight="24.5" prefWidth="156.5">
+                        <TextField fx:id="minInput" prefHeight="24.5" prefWidth="156.5" promptText="Whole number">
                             <HBox.margin>
                                 <Insets left="20.0" />
                             </HBox.margin>
@@ -134,7 +134,7 @@
                                 <Insets left="20.0" />
                             </HBox.margin>
                         </Label>
-                        <TextField fx:id="modPartMachineIDInput">
+                        <TextField fx:id="machineIDInput" promptText="Whole number">
                             <HBox.margin>
                                 <Insets left="18.5" />
                             </HBox.margin>

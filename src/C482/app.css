@@ -1,0 +1,21 @@
+
+
+.button{
+     -fx-color: blue;
+}
+
+.label{
+    -fx-color: blue;
+}
+
+.text-field{
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+    -fx-border-color: #d5d5d5;
+
+}
+.text-field.error{
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+    -fx-border-color: red;
+}

@@ -63,10 +63,13 @@
                                         <Insets left="20.0" />
                                     </HBox.margin>
                                 </Label>
-                                <TextField fx:id="modProductNameInput" prefHeight="25.0" prefWidth="90.0">
+                                <TextField fx:id="modProductNameInput" prefHeight="25.0" prefWidth="90.0" promptText="Product name">
                                     <HBox.margin>
                                         <Insets left="17.0" />
                                     </HBox.margin>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
                                 </TextField>
                             </children>
                         </HBox>
@@ -77,10 +80,13 @@
                                         <Insets left="20.0" />
                                     </HBox.margin>
                                 </Label>
-                                <TextField fx:id="modProductInvInput" prefHeight="25.0" prefWidth="90.0">
+                                <TextField fx:id="modProductInvInput" prefHeight="25.0" prefWidth="90.0" promptText="Whole number">
                                     <HBox.margin>
                                         <Insets left="33.5" />
                                     </HBox.margin>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
                                 </TextField>
                             </children>
                         </HBox>
@@ -91,10 +97,13 @@
                                         <Insets left="20.0" />
                                     </HBox.margin>
                                 </Label>
-                                <TextField fx:id="modProductPriceInput" prefHeight="25.0" prefWidth="90.0">
+                                <TextField fx:id="modProductPriceInput" prefHeight="25.0" prefWidth="90.0" promptText="Decimal number">
                                     <HBox.margin>
                                         <Insets left="22.5" />
                                     </HBox.margin>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
                                 </TextField>
                             </children>
                         </HBox>
@@ -105,20 +114,26 @@
                                         <Insets left="20.0" />
                                     </HBox.margin>
                                 </Label>
-                                <TextField fx:id="modProductMaxInput" prefHeight="25.0" prefWidth="90.0">
+                                <TextField fx:id="modProductMaxInput" prefHeight="25.0" prefWidth="90.0" promptText="Whole number">
                                     <HBox.margin>
                                         <Insets left="26.5" />
                                     </HBox.margin>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
                                 </TextField>
                                 <Label text="Min">
                                     <HBox.margin>
                                         <Insets left="15.0" />
                                     </HBox.margin>
                                 </Label>
-                                <TextField fx:id="modProductMinInput" prefHeight="25.0" prefWidth="90.0">
+                                <TextField fx:id="modProductMinInput" prefHeight="25.0" prefWidth="90.0" promptText="Whole number">
                                     <HBox.margin>
                                         <Insets left="15.0" />
                                     </HBox.margin>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
                                 </TextField>
                             </children>
                         </HBox>

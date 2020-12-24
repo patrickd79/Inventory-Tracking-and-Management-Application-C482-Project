@@ -40,9 +40,6 @@ public class MainFormController {
     public static int partModId;
     public static int prodModId;
 
-
-
-
     public void initialize(){
             mainPartsTable.setItems(Inventory.getAllParts());
             partIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -60,7 +57,6 @@ public class MainFormController {
     }
     public int partToModify(){
         ObservableList<Part> selectedPart;
-
         selectedPart = mainPartsTable.getSelectionModel().getSelectedItems();
         for(Part part: selectedPart) {
             partModId = part.getId();
@@ -82,10 +78,13 @@ public class MainFormController {
         allParts = mainPartsTable.getItems();
         selectedPart = mainPartsTable.getSelectionModel().getSelectedItems();
         for(Part part: selectedPart) {
-            allParts.remove(part);
-            Inventory.deletePart(part);
-        }
-    }
+           allParts.remove(part);
+           Inventory.deletePart(part);
+       }
+
+           }
+
+
 
 
     public void deleteSelectedProduct(){
@@ -107,6 +106,7 @@ public class MainFormController {
         Parent addPartWindow = FXMLLoader.load(getClass().getResource("addPart.fxml"));
         Scene addPartScene = new Scene(addPartWindow);
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        addPartScene.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
         window.setScene(addPartScene);
         window.show();
 
@@ -116,6 +116,7 @@ public class MainFormController {
         Parent addProductWindow = FXMLLoader.load(getClass().getResource("addProductForm.fxml"));
         Scene addProductScene = new Scene(addProductWindow);
         Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        addProductScene.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
         window.setScene(addProductScene);
         window.show();
 
@@ -123,21 +124,28 @@ public class MainFormController {
 
     public void openModPartForm(ActionEvent event) throws IOException {
         partToModify();
-        Parent modPartWindow = FXMLLoader.load(getClass().getResource("modifyPartForm.fxml"));
-        Scene modPartScene = new Scene(modPartWindow);
-        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setScene(modPartScene);
-        window.show();
+        if(partModId !=0) {
+            //partToModify();
+            Parent modPartWindow = FXMLLoader.load(getClass().getResource("modifyPartForm.fxml"));
+            Scene modPartScene = new Scene(modPartWindow);
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            modPartScene.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
+            window.setScene(modPartScene);
+            window.show();
+        }
 
     }
 
     public void openModProductForm(ActionEvent event) throws IOException {
-        productToModify();
-        Parent modProductWindow = FXMLLoader.load(getClass().getResource("modifyProductForm.fxml"));
-        Scene modProductScene = new Scene(modProductWindow);
-        Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setScene(modProductScene);
-        window.show();
+        if(partModId !=0) {
+            productToModify();
+            Parent modProductWindow = FXMLLoader.load(getClass().getResource("modifyProductForm.fxml"));
+            Scene modProductScene = new Scene(modProductWindow);
+            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            modProductScene.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
+            window.setScene(modProductScene);
+            window.show();
+        }
 
     }
 

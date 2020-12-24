@@ -66,10 +66,13 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="addProdNameInput" prefHeight="25.0" prefWidth="90.0">
+                        <TextField fx:id="addProdNameInput" prefHeight="25.0" prefWidth="105.0" promptText="Product name">
                            <HBox.margin>
                               <Insets left="17.0" />
                            </HBox.margin>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
                         </TextField>
                      </children>
                   </HBox>
@@ -80,10 +83,13 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="addProdInvInput" prefHeight="25.0" prefWidth="90.0">
+                        <TextField fx:id="addProdInvInput" prefHeight="25.0" prefWidth="105.0" promptText="Whole number">
                            <HBox.margin>
                               <Insets left="33.5" />
                            </HBox.margin>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
                         </TextField>
                      </children>
                   </HBox>
@@ -94,10 +100,13 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="addProdPriceInput" prefHeight="25.0" prefWidth="90.0">
+                        <TextField fx:id="addProdPriceInput" prefHeight="25.0" prefWidth="105.0" promptText="Decimal number">
                            <HBox.margin>
                               <Insets left="22.5" />
                            </HBox.margin>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
                         </TextField>
                      </children>
                   </HBox>
@@ -108,20 +117,26 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="addProdMaxInput" prefHeight="25.0" prefWidth="90.0">
+                        <TextField fx:id="addProdMaxInput" prefHeight="25.0" prefWidth="105.0" promptText="Whole number">
                            <HBox.margin>
                               <Insets left="26.5" />
                            </HBox.margin>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
                         </TextField>
                         <Label text="Min">
                            <HBox.margin>
                               <Insets left="15.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="addProdMinInput" prefHeight="25.0" prefWidth="90.0">
+                        <TextField fx:id="addProdMinInput" prefHeight="25.0" prefWidth="98.0" promptText="Whole number">
                            <HBox.margin>
                               <Insets left="15.0" />
                            </HBox.margin>
+                           <font>
+                              <Font size="10.0" />
+                           </font>
                         </TextField>
                      </children>
                   </HBox>
@@ -150,12 +165,12 @@
                <children>
                   <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="200.0" style="-fx-background-color: #ede0dd#ede0dd;">
                      <children>
-                        <TableView fx:id="addProdPartsAllPartsTable" prefHeight="175.0" prefWidth="359.0" HBox.hgrow="ALWAYS">
+                        <TableView fx:id="addProdPartsAllPartsTable" prefHeight="175.0" prefWidth="387.0" HBox.hgrow="ALWAYS">
                           <columns>
-                            <TableColumn fx:id="addProdAllPartsIDCol" prefWidth="57.0" text="Part ID" />
-                            <TableColumn fx:id="addProdAllPartsNameCol" prefWidth="76.0" text="Part Name" />
-                              <TableColumn fx:id="addProdAllPartsInvCol" prefWidth="114.0" text="Inventory Level" />
-                              <TableColumn fx:id="addProdAllPartsPriceCol" prefWidth="178.0" text="Price/Cost per Unit" />
+                            <TableColumn fx:id="addProdAllPartsIDCol" prefWidth="72.0" text="Part ID" />
+                            <TableColumn fx:id="addProdAllPartsNameCol" text="Part Name" />
+                              <TableColumn fx:id="addProdAllPartsInvCol" prefWidth="97.0" text="Inventory Level" />
+                              <TableColumn fx:id="addProdAllPartsPriceCol" prefWidth="176.0" text="Price/Cost per Unit" />
                           </columns>
                         </TableView>
                      </children>
@@ -171,7 +186,7 @@
                   </HBox>
                   <HBox prefHeight="175.0" prefWidth="200.0" style="-fx-background-color: #dddded#dddded;">
                      <children>
-                        <TableView fx:id="addProdAssociatedPartsTable" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                        <TableView fx:id="addProdAssociatedPartsTable" prefHeight="200.0" prefWidth="350.0" HBox.hgrow="ALWAYS">
                           <columns>
                             <TableColumn fx:id="addProdAssociatedPartsIDCol" prefWidth="59.0" text="Part ID" />
                             <TableColumn fx:id="addProdAssociatedPartsNameCol" prefWidth="83.0" text="Part Name" />
