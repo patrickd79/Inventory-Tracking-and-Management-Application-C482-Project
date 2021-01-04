@@ -29,7 +29,7 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="50.0" prefWidth="440.0">
                             <children>
-                                <TextField fx:id="modProductSearch" promptText="Search by Part ID or Name">
+                                <TextField fx:id="modProductSearch" onAction="#getPartsSearchResults" promptText="Search Parts by Part ID or Name">
                                     <VBox.margin>
                                         <Insets bottom="10.0" left="250.0" top="10.0" />
                                     </VBox.margin>

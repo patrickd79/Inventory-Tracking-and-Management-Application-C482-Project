@@ -32,7 +32,7 @@ public class AddPartController<event> {
     @FXML
     private Label machineIDCompNameLabel;
     public int partID = 0;
-    public String partName = null;
+    private String partName = "";
     public int stockNum;
     public double partPrice;
     public int partMin;
@@ -77,7 +77,7 @@ public class AddPartController<event> {
     }
 
     public boolean nameValid() {
-        partName = nameInput.getText().trim();
+
         ObservableList<String> styleClass = nameInput.getStyleClass();
         if(partName.length() >= 2) {
             styleClass.removeAll("error");
@@ -90,7 +90,7 @@ public class AddPartController<event> {
     }
 
     public boolean companyNameValid() {
-        companyName = machineIDInput.getText().trim();
+
         ObservableList<String> CompStyleClass = machineIDInput.getStyleClass();
         if(companyName.length() >= 2) {
             CompStyleClass.removeAll("error");
@@ -135,7 +135,6 @@ public class AddPartController<event> {
     }
 
     public void addInHousePart(){
-        if(nameValid() && minLessThanMax() && invBetweenMinMax()){
         try {
             partName = nameInput.getText().trim();
             stockNum = Integer.parseInt(inventoryInput.getText().trim());
@@ -143,19 +142,22 @@ public class AddPartController<event> {
             partMin = Integer.parseInt(minInput.getText().trim());
             partMax = Integer.parseInt(maxInput.getText().trim());
             machineID = Integer.parseInt(machineIDInput.getText().trim());
-            Inventory.addPart(new InHouse(partIDGenerator(), partName, partPrice, stockNum, partMin, partMax, machineID));
-            partCreated = true;
-        }catch(NumberFormatException e) {
-            DataValidation.invalidDataAlert();
-            partCreated = false;
+                if (nameValid() && minLessThanMax() && invBetweenMinMax()) {
+                    Inventory.addPart(new InHouse(partIDGenerator(), partName, partPrice, stockNum, partMin, partMax, machineID));
+                    partCreated = true;
+                } else {
+                    partCreated = false;
+                }
+        }catch(NumberFormatException e){
+                DataValidation.invalidDataAlert();
+                partCreated = false;
+            }
         }
-        }else{
-            partCreated = false;
-        }
-    }
+
 
     public void addOutsourcedPart() {
-        if(nameValid() && minLessThanMax() && invBetweenMinMax() && companyNameValid()) {
+
+
             try {
                 partName = nameInput.getText().trim();
                 stockNum = Integer.parseInt(inventoryInput.getText().trim());
@@ -163,15 +165,17 @@ public class AddPartController<event> {
                 partMin = Integer.parseInt(minInput.getText().trim());
                 partMax = Integer.parseInt(maxInput.getText().trim());
                 companyName = (machineIDInput.getText().trim());
-                Inventory.addPart(new Outsourced(partIDGenerator(), partName, partPrice, stockNum, partMin, partMax, companyName));
-                partCreated = true;
-            } catch (NumberFormatException e) {
+                    if(nameValid() && minLessThanMax() && invBetweenMinMax() && companyNameValid()) {
+                        Inventory.addPart(new Outsourced(partIDGenerator(), partName, partPrice, stockNum, partMin, partMax, companyName));
+                        partCreated = true;
+                    }else{
+                        partCreated = false;
+                    }
+            }catch (NumberFormatException e) {
                 DataValidation.invalidDataAlert();
                 partCreated = false;
             }
-        }else{
-            partCreated = false;
-        }
+
     }
     
     public void inHouseOrOutsourced(){

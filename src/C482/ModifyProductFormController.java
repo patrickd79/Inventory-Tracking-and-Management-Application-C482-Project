@@ -59,8 +59,22 @@ public class ModifyProductFormController {
     public ObservableList<Part> tempAssociatedParts = FXCollections.observableArrayList();
     public Product newProduct;
 
-
-
+    public void getPartsSearchResults(ActionEvent event) throws IOException{
+        String name = modProductSearch.getText();
+        ObservableList<Part> parts = searchPartNameResultsList(name);
+        modProdAllPartsTable.setItems(parts);
+        modProductSearch.setText("");
+    }
+    public ObservableList<Part> searchPartNameResultsList(String searchStr){
+        ObservableList<Part> results = FXCollections.observableArrayList();
+        ObservableList<Part> allParts = Inventory.getAllParts();
+        for(Part part: allParts){
+            if(part.getName().contains(searchStr)){
+                results.add(part);
+            }
+        }
+        return results;
+    }
     public void addAssociatedParts(ActionEvent event) throws IOException{
         ObservableList<Part> selectedPart;
         selectedPart = modProdAllPartsTable.getSelectionModel().getSelectedItems();
@@ -72,6 +86,7 @@ public class ModifyProductFormController {
         ObservableList<Part> selectedPartForRemove;
         selectedPartForRemove = modProdAssociatedPartsTable.getSelectionModel().getSelectedItems();
         for (Part part : selectedPartForRemove) {
+            if(DataValidation.confirmRemoveAssociatedPart(part.getName(), thisProduct.getName()))
             thisProduct.deleteAssociatedPart(part);
         }
     }

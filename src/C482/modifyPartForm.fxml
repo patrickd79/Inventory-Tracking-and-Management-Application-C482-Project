@@ -142,7 +142,7 @@
                     </children></HBox>
                 <HBox alignment="TOP_RIGHT" prefHeight="296.0" prefWidth="500.0">
                     <children>
-                        <Button fx:id="modPartSaveBtn" mnemonicParsing="false" onAction="#saveModifiedPart" text="Save">
+                        <Button fx:id="modPartSaveBtn" mnemonicParsing="false" onAction="#saveChangedPart" text="Save">
                             <HBox.margin>
                                 <Insets right="20.0" top="30.0" />
                             </HBox.margin>

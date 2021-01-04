@@ -1,5 +1,6 @@
 package C482;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,13 +11,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class MainFormController {
-
+    @FXML
+    private TextField prodSearchTF;
+    @FXML
+    private TextField partsSearchTF;
     @FXML
     private TableView<Part> mainPartsTable;
     @FXML
@@ -73,27 +78,36 @@ public class MainFormController {
         return prodModId;
     }
 
-   public void deleteSelectedPart(){
-        ObservableList<Part> selectedPart, allParts;
-        allParts = mainPartsTable.getItems();
-        selectedPart = mainPartsTable.getSelectionModel().getSelectedItems();
-        for(Part part: selectedPart) {
-           allParts.remove(part);
-           Inventory.deletePart(part);
-       }
-
+   public void deleteSelectedPart() {
+       partToModify();
+       if (partModId != 0) {
+           ObservableList<Part> selectedPart, allParts;
+           allParts = mainPartsTable.getItems();
+           selectedPart = mainPartsTable.getSelectionModel().getSelectedItems();
+           for (Part part : selectedPart) {
+               if(DataValidation.confirmDelete(part.getName())) {
+                   allParts.remove(part);
+                   Inventory.deletePart(part);
+               }
            }
-
-
-
-
-    public void deleteSelectedProduct(){
-        ObservableList<Product> selectedProduct, allProducts;
-        allProducts = mainProductsTable.getItems();
-        selectedProduct = mainProductsTable.getSelectionModel().getSelectedItems();
-        for(Product product: selectedProduct) {
-            allProducts.remove(product);
-            Inventory.deleteProduct(product);
+       }else{
+           DataValidation.pleaseMakeASelection("part");
+       }
+   }
+   public void deleteSelectedProduct() {
+        productToModify();
+        if (prodModId != 0) {
+            ObservableList<Product> selectedProduct, allProducts;
+            allProducts = mainProductsTable.getItems();
+            selectedProduct = mainProductsTable.getSelectionModel().getSelectedItems();
+            for (Product product : selectedProduct) {
+                if(DataValidation.confirmDelete(product.getName())) {
+                    allProducts.remove(product);
+                    Inventory.deleteProduct(product);
+                }
+            }
+        }else{
+            DataValidation.pleaseMakeASelection("product");
         }
     }
 
@@ -125,37 +139,63 @@ public class MainFormController {
     public void openModPartForm(ActionEvent event) throws IOException {
         partToModify();
         if(partModId !=0) {
-            //partToModify();
             Parent modPartWindow = FXMLLoader.load(getClass().getResource("modifyPartForm.fxml"));
             Scene modPartScene = new Scene(modPartWindow);
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
             modPartScene.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
             window.setScene(modPartScene);
             window.show();
+        }else{
+            DataValidation.pleaseMakeASelection("part");
         }
-
     }
 
     public void openModProductForm(ActionEvent event) throws IOException {
-        if(partModId !=0) {
-            productToModify();
+        productToModify();
+        if(prodModId !=0) {
             Parent modProductWindow = FXMLLoader.load(getClass().getResource("modifyProductForm.fxml"));
             Scene modProductScene = new Scene(modProductWindow);
             Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
             modProductScene.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
             window.setScene(modProductScene);
             window.show();
+        }else{
+            DataValidation.pleaseMakeASelection("product");
         }
 
     }
+    public void getPartsSearchResults(ActionEvent event) throws IOException{
+        String name = partsSearchTF.getText();
+        ObservableList<Part> parts = searchPartNameResultsList(name);
+        mainPartsTable.setItems(parts);
+        partsSearchTF.setText("");
+    }
 
-    public boolean searchPart(int id){
-        for(Part part: Inventory.getAllParts()){
-            if(part.getId() == id){
-                return true;
+    public ObservableList<Part> searchPartNameResultsList(String searchStr){
+        ObservableList<Part> results = FXCollections.observableArrayList();
+        ObservableList<Part> allParts = Inventory.getAllParts();
+        for(Part part: allParts){
+            if(part.getName().contains(searchStr)){
+                results.add(part);
             }
         }
-        return false;
+        return results;
+    }
+    public ObservableList<Product> searchProdNameResultsList(String searchStr){
+        ObservableList<Product> results = FXCollections.observableArrayList();
+        ObservableList<Product> allProds = Inventory.getAllProducts();
+        for(Product prod: allProds){
+            if(prod.getName().contains(searchStr)){
+                results.add(prod);
+            }
+        }
+        return results;
+    }
+    public void getProductSearchResults(ActionEvent event) throws IOException{
+        String name = prodSearchTF.getText();
+        ObservableList<Product> prod = searchProdNameResultsList(name);
+        mainProductsTable.setItems(prod);
+        prodSearchTF.setText("");
     }
 
     public boolean deletePart(int id){

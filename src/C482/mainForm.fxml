@@ -61,7 +61,7 @@
                         <Font name="Arial Black" size="14.0" />
                      </font>
                   </Label>
-                  <TextField promptText="search" style="-fx-background-color: white; -fx-border-color: #e4e4e4; -fx-border-style: solid; -fx-border-radius: 5;" HBox.hgrow="ALWAYS">
+                  <TextField fx:id="partsSearchTF" onAction="#getPartsSearchResults" promptText="Search Parts" style="-fx-background-color: white; -fx-border-color: #e4e4e4; -fx-border-style: solid; -fx-border-radius: 5;" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets left="100.0" right="5.0" top="5.0" />
                      </HBox.margin>
@@ -133,7 +133,7 @@
                         <Insets left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </Label>
-                  <TextField promptText="search" style="-fx-background-color: white;" HBox.hgrow="ALWAYS">
+                  <TextField fx:id="prodSearchTF" onAction="#getProductSearchResults" promptText="Search Products" style="-fx-background-color: white;" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="14.0" />
                      </font>

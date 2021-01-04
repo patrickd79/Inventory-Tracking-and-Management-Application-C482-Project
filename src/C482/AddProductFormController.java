@@ -18,7 +18,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class AddProductFormController {
-
+    @FXML
+    private TextField addProdSearchField;
     @FXML
     private TableView<Part> addProdPartsAllPartsTable;
     @FXML
@@ -54,7 +55,22 @@ public class AddProductFormController {
     public int productID = 0;
     public ObservableList<Part> pendingAssociatedParts = FXCollections.observableArrayList();
 
-
+    public void getPartsSearchResults(ActionEvent event) throws IOException{
+        String name = addProdSearchField.getText();
+        ObservableList<Part> parts = searchPartNameResultsList(name);
+        addProdPartsAllPartsTable.setItems(parts);
+        addProdSearchField.setText("");
+    }
+    public ObservableList<Part> searchPartNameResultsList(String searchStr){
+        ObservableList<Part> results = FXCollections.observableArrayList();
+        ObservableList<Part> allParts = Inventory.getAllParts();
+        for(Part part: allParts){
+            if(part.getName().contains(searchStr)){
+                results.add(part);
+            }
+        }
+        return results;
+    }
     public void addAssociatedParts(ActionEvent event) throws IOException{
         ObservableList<Part> selectedParts;
         selectedParts = addProdPartsAllPartsTable.getSelectionModel().getSelectedItems();

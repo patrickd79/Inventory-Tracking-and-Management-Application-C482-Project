@@ -44,6 +44,7 @@ public class ModifyPartController {
     private boolean partCreated = false;
     String companyName;
     private final int partID = MainFormController.partModId;
+    //private int errorCode;
 
     public boolean inHouse(int id) {
         int index = -1;
@@ -154,20 +155,29 @@ public class ModifyPartController {
     }
 
     public boolean nameValid() {
-        name = nameInput.getText().trim();
         ObservableList<String> styleClass = nameInput.getStyleClass();
         if (name.length() >= 2) {
             styleClass.removeAll("error");
             return true;
         } else {
             styleClass.add("error");
-            DataValidation.invalidStringAlert("name");
+            DataValidation.invalidNameAlert("part name");
+            return false;
+        }
+    }
+    public boolean inventoryValid(){
+        ObservableList<String> styleClass = inventoryInput.getStyleClass();
+        if (stockNum.) {
+            styleClass.removeAll("error");
+            return true;
+        } else {
+            styleClass.add("error");
+            DataValidation.invalidNameAlert("part name");
             return false;
         }
     }
 
     public boolean companyNameValid() {
-        companyName = machineIDInput.getText().trim();
         ObservableList<String> CompStyleClass = machineIDInput.getStyleClass();
         if (companyName.length() >= 2) {
             CompStyleClass.removeAll("error");
@@ -180,8 +190,6 @@ public class ModifyPartController {
     }
 
     public boolean minLessThanMax() {
-        min = Integer.parseInt(minInput.getText().trim());
-        max = Integer.parseInt(maxInput.getText().trim());
         ObservableList<String> minStyleClass = minInput.getStyleClass();
         ObservableList<String> maxStyleClass = maxInput.getStyleClass();
         if (min < max) {
@@ -197,9 +205,7 @@ public class ModifyPartController {
     }
 
     public boolean invBetweenMinMax() {
-        min = Integer.parseInt(minInput.getText().trim());
-        max = Integer.parseInt(maxInput.getText().trim());
-        stockNum = Integer.parseInt(inventoryInput.getText().trim());
+
         ObservableList<String> invStyleClass = inventoryInput.getStyleClass();
         if (stockNum < max && stockNum > min) {
             invStyleClass.removeAll("error");
@@ -211,58 +217,9 @@ public class ModifyPartController {
         }
     }
 
-
-    public Part getChangedPart() {
-        Part part = null;
-        if (inHouseRadio.isSelected()) {
-            if (nameValid() && minLessThanMax() && invBetweenMinMax()) {
-                try {
-                    name = nameInput.getText().trim();
-                    stockNum = Integer.parseInt(inventoryInput.getText().trim());
-                    price = Double.parseDouble(priceInput.getText().trim());
-                    min = Integer.parseInt(minInput.getText().trim());
-                    max = Integer.parseInt(maxInput.getText().trim());
-                    machineID = Integer.parseInt(machineIDInput.getText().trim());
-                    part = new InHouse(partID, name, price, stockNum, min, max, machineID);
-                    partCreated = true;
-                } catch (NumberFormatException e) {
-                    DataValidation.invalidDataAlert();
-                    partCreated = false;
-                }
-            }else {
-                partCreated = false;
-            }
-        }else{
-                if (nameValid() && minLessThanMax() && invBetweenMinMax() && companyNameValid()) {
-                    try {
-                        name = nameInput.getText().trim();
-                        stockNum = Integer.parseInt(inventoryInput.getText().trim());
-                        price = Double.parseDouble(priceInput.getText().trim());
-                        min = Integer.parseInt(minInput.getText().trim());
-                        max = Integer.parseInt(maxInput.getText().trim());
-                        companyName = machineIDInput.getText().trim();
-                        part = new Outsourced(partID, name, price, stockNum, min, max, companyName);
-                        partCreated = true;
-                    } catch (NumberFormatException e) {
-                        DataValidation.invalidDataAlert();
-                        partCreated = false;
-                    }
-                } else {
-                    partCreated =false;
-                }
-                //return part;
-            }
-
-        return part;
-    }
-
-
-
-
-
-    public int findPartIndex(int id){
+    public int findPartIndex(int id) {
         int index = -1;
-        for(Part part: Inventory.getAllParts()) {
+        for (Part part : Inventory.getAllParts()) {
             if (part.getId() == id) {
                 index = Inventory.getAllParts().indexOf(part);
 
@@ -271,14 +228,64 @@ public class ModifyPartController {
         return index;
     }
 
-    public void saveModifiedPart(ActionEvent event) throws IOException {
+
+
+
+
+
+    public void saveChangedPart(ActionEvent event) throws IOException {
+        if (inHouseRadio.isSelected()) {
+            try {
+                name = nameInput.getText().trim();
+                nameValid();
+                stockNum = Integer.parseInt(inventoryInput.getText().trim());
+                price = Double.parseDouble(priceInput.getText().trim());
+                min = Integer.parseInt(minInput.getText().trim());
+                max = Integer.parseInt(maxInput.getText().trim());
+                machineID = Integer.parseInt(machineIDInput.getText().trim());
+
+                if (nameValid() && minLessThanMax() && invBetweenMinMax()) {
+
+                    Part part = new InHouse(partID, name, price, stockNum, min, max, machineID);
+                    Inventory.updatePart(findPartIndex(partID), part);
+                    openMainForm(event);
+                }
+            } catch (NumberFormatException e) {
+                DataValidation.invalidDataAlert();
+            }
+        } else {
+            try {
+                name = nameInput.getText().trim();
+                stockNum = Integer.parseInt(inventoryInput.getText().trim());
+                price = Double.parseDouble(priceInput.getText().trim());
+                min = Integer.parseInt(minInput.getText().trim());
+                max = Integer.parseInt(maxInput.getText().trim());
+                companyName = machineIDInput.getText().trim();
+                if (nameValid() && minLessThanMax() && invBetweenMinMax() && companyNameValid()) {
+                    Part part = new Outsourced(partID, name, price, stockNum, min, max, companyName);
+                    Inventory.updatePart(findPartIndex(partID), part);
+                    openMainForm(event);
+                }
+            } catch (NumberFormatException e) {
+                DataValidation.invalidDataAlert();
+            }
+        }
+    }
+
+
+
+
+
+
+
+    /*public void saveModifiedPart(ActionEvent event) throws IOException {
         if(partCreated) {
             Inventory.updatePart(findPartIndex(partID), getChangedPart());
             openMainForm(event);
         }else{
             DataValidation.invalidDataAlert();
         }
-    }
+    }*/
 
     public void initialize(){
         isInHousePart(partID);
