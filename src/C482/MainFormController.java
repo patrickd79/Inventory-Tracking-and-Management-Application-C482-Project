@@ -42,9 +42,8 @@ public class MainFormController {
     private TableColumn<Product, Integer> productInvLevelColumn;
     @FXML
     private TableColumn<Product, Double> productPriceColumn;
-    public static int partModId;
-    public static int prodModId;
-
+    public static int partModId = 0;
+    public static int prodModId = 0;
     public void initialize(){
             mainPartsTable.setItems(Inventory.getAllParts());
             partIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -70,15 +69,13 @@ public class MainFormController {
     }
     public int productToModify(){
         ObservableList<Product> selectedProduct;
-
         selectedProduct = mainProductsTable.getSelectionModel().getSelectedItems();
         for(Product product: selectedProduct) {
             prodModId = product.getId();
         }
         return prodModId;
     }
-
-   public void deleteSelectedPart() {
+    public void deleteSelectedPart() {
        partToModify();
        if (partModId != 0) {
            ObservableList<Part> selectedPart, allParts;
@@ -94,28 +91,30 @@ public class MainFormController {
            DataValidation.pleaseMakeASelection("part");
        }
    }
-   public void deleteSelectedProduct() {
+    public void deleteSelectedProduct() {
         productToModify();
         if (prodModId != 0) {
             ObservableList<Product> selectedProduct, allProducts;
             allProducts = mainProductsTable.getItems();
             selectedProduct = mainProductsTable.getSelectionModel().getSelectedItems();
             for (Product product : selectedProduct) {
-                if(DataValidation.confirmDelete(product.getName())) {
-                    allProducts.remove(product);
-                    Inventory.deleteProduct(product);
+                if(product.getAllAssociatedParts().isEmpty()) {
+                    if (DataValidation.confirmDelete(product.getName())) {
+                        allProducts.remove(product);
+                        Inventory.deleteProduct(product);
+                    }
+                }else{
+                    DataValidation.prodHasAssociatedPartsAlert();
                 }
             }
         }else{
             DataValidation.pleaseMakeASelection("product");
         }
     }
-
     public void exitApplication(){
         System.out.println("Closing");
         System.exit(0);
     }
-
     public void openAddPartForm(ActionEvent event) throws IOException {
         Parent addPartWindow = FXMLLoader.load(getClass().getResource("addPart.fxml"));
         Scene addPartScene = new Scene(addPartWindow);
@@ -125,7 +124,6 @@ public class MainFormController {
         window.show();
 
     }
-
     public void openAddProductForm(ActionEvent event) throws IOException {
         Parent addProductWindow = FXMLLoader.load(getClass().getResource("addProductForm.fxml"));
         Scene addProductScene = new Scene(addProductWindow);
@@ -135,7 +133,6 @@ public class MainFormController {
         window.show();
 
     }
-
     public void openModPartForm(ActionEvent event) throws IOException {
         partToModify();
         if(partModId !=0) {
@@ -145,11 +142,11 @@ public class MainFormController {
             modPartScene.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
             window.setScene(modPartScene);
             window.show();
+            partModId = 0;
         }else{
             DataValidation.pleaseMakeASelection("part");
         }
     }
-
     public void openModProductForm(ActionEvent event) throws IOException {
         productToModify();
         if(prodModId !=0) {
@@ -159,6 +156,7 @@ public class MainFormController {
             modProductScene.getStylesheets().add(getClass().getResource("app.css").toExternalForm());
             window.setScene(modProductScene);
             window.show();
+            prodModId = 0;
         }else{
             DataValidation.pleaseMakeASelection("product");
         }
@@ -170,7 +168,6 @@ public class MainFormController {
         mainPartsTable.setItems(parts);
         partsSearchTF.setText("");
     }
-
     public ObservableList<Part> searchPartNameResultsList(String searchStr){
         ObservableList<Part> results = FXCollections.observableArrayList();
         ObservableList<Part> allParts = Inventory.getAllParts();
@@ -197,41 +194,4 @@ public class MainFormController {
         mainProductsTable.setItems(prod);
         prodSearchTF.setText("");
     }
-
-    public boolean deletePart(int id){
-        int index = -1;
-        for(Part part: Inventory.getAllParts()){
-            index++;
-            if(part.getId() == id){
-                Inventory.getAllParts().remove(part.getId());
-                return true;
-            }
-        }
-        return false;
-    }
-    public boolean deleteProd(int id){
-        int index = -1;
-        for(Product product: Inventory.getAllProducts()){
-            index++;
-            if(product.getId() == id){
-                Inventory.getAllProducts().remove(product.getId());
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Part selectPart(int id){
-        for(Part part: Inventory.getAllParts()){
-            if(part.getId() == id){
-                return part;
-            }
-        }
-        return null;
-    }
-
-
-
-
-
 }

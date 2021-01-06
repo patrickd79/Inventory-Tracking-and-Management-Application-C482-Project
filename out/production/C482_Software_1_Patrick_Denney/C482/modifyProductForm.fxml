@@ -63,7 +63,7 @@
                                         <Insets left="20.0" />
                                     </HBox.margin>
                                 </Label>
-                                <TextField fx:id="modProductNameInput" prefHeight="25.0" prefWidth="90.0" promptText="Product name">
+                                <TextField fx:id="nameInput" prefHeight="25.0" prefWidth="90.0" promptText="Product name">
                                     <HBox.margin>
                                         <Insets left="17.0" />
                                     </HBox.margin>
@@ -80,7 +80,7 @@
                                         <Insets left="20.0" />
                                     </HBox.margin>
                                 </Label>
-                                <TextField fx:id="modProductInvInput" prefHeight="25.0" prefWidth="90.0" promptText="Whole number">
+                                <TextField fx:id="inventoryInput" prefHeight="25.0" prefWidth="90.0" promptText="Whole number">
                                     <HBox.margin>
                                         <Insets left="33.5" />
                                     </HBox.margin>
@@ -97,7 +97,7 @@
                                         <Insets left="20.0" />
                                     </HBox.margin>
                                 </Label>
-                                <TextField fx:id="modProductPriceInput" prefHeight="25.0" prefWidth="90.0" promptText="Decimal number">
+                                <TextField fx:id="priceInput" prefHeight="25.0" prefWidth="90.0" promptText="Decimal number">
                                     <HBox.margin>
                                         <Insets left="22.5" />
                                     </HBox.margin>
@@ -114,7 +114,7 @@
                                         <Insets left="20.0" />
                                     </HBox.margin>
                                 </Label>
-                                <TextField fx:id="modProductMaxInput" prefHeight="25.0" prefWidth="90.0" promptText="Whole number">
+                                <TextField fx:id="maxInput" prefHeight="25.0" prefWidth="90.0" promptText="Whole number">
                                     <HBox.margin>
                                         <Insets left="26.5" />
                                     </HBox.margin>
@@ -127,7 +127,7 @@
                                         <Insets left="15.0" />
                                     </HBox.margin>
                                 </Label>
-                                <TextField fx:id="modProductMinInput" prefHeight="25.0" prefWidth="90.0" promptText="Whole number">
+                                <TextField fx:id="minInput" prefHeight="25.0" prefWidth="90.0" promptText="Whole number">
                                     <HBox.margin>
                                         <Insets left="15.0" />
                                     </HBox.margin>
@@ -144,7 +144,7 @@
             <bottom>
                 <HBox alignment="CENTER_RIGHT" prefHeight="52.0" prefWidth="758.0">
                     <children>
-                        <Button fx:id="modPRodSaveBtn" mnemonicParsing="false" onAction="#saveModifiedProduct" prefHeight="35.0" prefWidth="60.0" text="Save">
+                        <Button fx:id="modPRodSaveBtn" mnemonicParsing="false" onAction="#getChangedProd" prefHeight="35.0" prefWidth="60.0" text="Save">
                             <HBox.margin>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </HBox.margin>

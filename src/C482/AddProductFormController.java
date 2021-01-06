@@ -41,20 +41,22 @@ public class AddProductFormController {
     @FXML
     private TableColumn<Part,Double> addProdAssociatedPartsPriceCol;
     @FXML
-    private TextField addProdIDInput;
+    private TextField nameInput;
     @FXML
-    private TextField addProdNameInput;
+    private TextField inventoryInput;
     @FXML
-    private TextField addProdInvInput;
+    private TextField priceInput;
     @FXML
-    private TextField addProdPriceInput;
+    private TextField maxInput;
     @FXML
-    private TextField addProdMaxInput;
-    @FXML
-    private TextField addProdMinInput;
+    private TextField minInput;
+    private String name;
+    private int stockNum;
+    private double price;
+    private int min;
+    private int max;
     public int productID = 0;
     public ObservableList<Part> pendingAssociatedParts = FXCollections.observableArrayList();
-
     public void getPartsSearchResults(ActionEvent event) throws IOException{
         String name = addProdSearchField.getText();
         ObservableList<Part> parts = searchPartNameResultsList(name);
@@ -110,31 +112,114 @@ public class AddProductFormController {
     public void cancelBtn(ActionEvent event) throws IOException{
         openMainForm(event);
     }
-    public void addNewProd(ActionEvent event) throws IOException{
-        Product product;
-        String prodName = addProdNameInput.getText().trim();
-        int prodStockNum = Integer.parseInt(addProdInvInput.getText().trim());
-        double prodPrice = Double.parseDouble(addProdPriceInput.getText().trim());
-        int prodMin = Integer.parseInt(addProdMinInput.getText().trim());
-        int prodMax = Integer.parseInt(addProdMaxInput.getText().trim());
-       product = new Product(productIDGenerator(),
-                prodName,
-                prodPrice,
-                prodStockNum,
-                prodMin,
-                prodMax);
-       Inventory.addProduct(product);
-       for(Part part: pendingAssociatedParts) {
-           product.addAssociatedPart(part);
-       }
-       openMainForm(event);
-
-        System.out.println(product.getAllAssociatedParts());
-        System.out.println(product.getId());
+    public boolean nameValid() {
+        if (name.length() >= 2) {
+            return true;
+        }else{
+            styleClass(nameInput).add("error");
+            DataValidation.invalidNameAlert("Part name");
+        }
+        return false;
     }
+    public boolean priceValid(){
+        if(price > 0){
+            return true;
+        }else{
+            styleClass(priceInput).add("error");
+            DataValidation.invalidNumberAlert("Price value");
+        }
+        return false;
+    }
+    public boolean inventoryValid(){
+        if(stockNum > 0){
+            return true;
+        }else{
+            styleClass(inventoryInput).add("error");
+            DataValidation.invalidNumberAlert("Inventory value");
+        }
+        return false;
+    }
+    public boolean minLessThanMax(){
+        min = Integer.parseInt(minInput.getText().trim());
+        max = Integer.parseInt(maxInput.getText().trim());
+        if(min < max){
+            return true;
+        }else{
+            styleClass(minInput).add("error");
+            styleClass(maxInput).add("error");
+            DataValidation.maxLessThanMin();
+            return false;
+        }
+    }
+    public boolean invBetweenMinMax(){
+        min = Integer.parseInt(minInput.getText().trim());
+        max = Integer.parseInt(maxInput.getText().trim());
+        stockNum = Integer.parseInt(inventoryInput.getText().trim());
+        if(stockNum < max && stockNum > min){
+            return true;
+        }else{
+            styleClass(inventoryInput).add("error");
+            DataValidation.invNotBetweenMinMaxAlert();
+            return false;
+        }
+    }
+    private ObservableList<String> styleClass(TextField field){
+        return field.getStyleClass();
+    }
+    private void removeAllErrorFlags(){
+        styleClass(nameInput).removeAll("error");
+        styleClass(inventoryInput).removeAll("error");
+        styleClass(priceInput).removeAll("error");
+        styleClass(minInput).removeAll("error");
+        styleClass(maxInput).removeAll("error");
+    }
+    public void addNewProd(ActionEvent event) throws IOException{
+        removeAllErrorFlags();
+        Product product;
+        name = nameInput.getText().trim();
+        try{
+            stockNum = Integer.parseInt(inventoryInput.getText().trim());
+        }catch (NumberFormatException e) {
+            styleClass(inventoryInput).add("error");
+            DataValidation.invalidNumberAlert("Inventory value");
+        }
+        try {
+            price = Double.parseDouble(priceInput.getText().trim());
+        }catch (NumberFormatException e){
+            styleClass(priceInput).add("error");
+            DataValidation.invalidNumberAlert("Price value");
+        }
+        try {
+            min = Integer.parseInt(minInput.getText().trim());
+        }catch (NumberFormatException e){
+            styleClass(minInput).add("error");
+            DataValidation.invalidNumberAlert("Minimum Inventory value");
+        }
+        try {
+            max = Integer.parseInt(maxInput.getText().trim());
+        }catch (NumberFormatException e){
+            styleClass(maxInput).add("error");
+            DataValidation.invalidNumberAlert("Maximum Inventory value");
+        }
+        if (nameValid() && minLessThanMax() &&
+                invBetweenMinMax() && priceValid()
+            && inventoryValid()) {
+            product = new Product(productIDGenerator(),
+                    name,
+                    price,
+                    stockNum,
+                    min,
+                    max);
+            Inventory.addProduct(product);
+            for (Part part : pendingAssociatedParts) {
+                product.addAssociatedPart(part);
+            }
+            openMainForm(event);
 
-
-
+            System.out.println(product.getAllAssociatedParts());
+            System.out.println(product.getId());
+        }
+    }
     public void initialize(){
         addProdPartsAllPartsTable.setItems(Inventory.getAllParts());
         addProdAllPartsIDCol.setCellValueFactory(new PropertyValueFactory<>("id"));

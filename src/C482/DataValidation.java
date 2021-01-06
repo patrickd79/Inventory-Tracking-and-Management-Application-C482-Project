@@ -17,12 +17,6 @@ public class DataValidation {
         alert.setContentText("Max is less than Min");
         alert.showAndWait();
     }
-    public static void invalidDataAlert(){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Invalid Data");
-        alert.setContentText("Please enter valid data into the text fields.");
-        alert.showAndWait();
-    }
     public static void invalidStringAlert(String message){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Invalid Data");
@@ -33,6 +27,18 @@ public class DataValidation {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Invalid Name");
         alert.setContentText("Please enter a valid " + message + ".");
+        alert.showAndWait();
+    }
+    public static void invalidNumberAlert(String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Invalid " + message);
+        alert.setContentText("Please enter a valid " + message + ".");
+        alert.showAndWait();
+    }
+    public static void invalidDataAlert(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Invalid Data");
+        alert.setContentText("Please ensure all data entered is correct.");
         alert.showAndWait();
     }
     public static void pleaseMakeASelection(String message){
@@ -52,6 +58,13 @@ public class DataValidation {
             return false;
         }
         return false;
+    }
+    public static void prodHasAssociatedPartsAlert(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Associated Parts Warning");
+        alert.setContentText("This product cannot be deleted, because it contains associated parts. " +
+                "Please remove all associated parts prior to deleting.");
+        alert.showAndWait();
     }
     public static boolean confirmRemoveAssociatedPart(String message, String message2){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

@@ -41,15 +41,10 @@ public class ModifyPartController {
     private int min;
     private int max;
     private int machineID;
-    private boolean partCreated = false;
     String companyName;
-    private final int partID = MainFormController.partModId;
-    //private int errorCode;
-
+    private int partID = MainFormController.partModId;
     public boolean inHouse(int id) {
-        int index = -1;
         for (Part part : Inventory.getAllParts()) {
-            index++;
             if (part.getId() == id) {
                 if (part instanceof InHouse) {
                     return true;
@@ -58,7 +53,6 @@ public class ModifyPartController {
         }
         return false;
     }
-
     private void isInHousePart(int id) {
         if (inHouse(id)) {
             inHouseRadio.setSelected(true);
@@ -69,7 +63,6 @@ public class ModifyPartController {
 
         }
     }
-
     @FXML
     private void changeTypeOfPart(ActionEvent event) {
         if (inHouseRadio.isSelected()) {
@@ -78,62 +71,44 @@ public class ModifyPartController {
             machineIDCompNameLabel.setText("Company Name");
         }
     }
-
     private void setNameField(int id) {
-        int index = -1;
         for (Part part : Inventory.getAllParts()) {
-            index++;
             if (part.getId() == id) {
                 nameInput.setText(part.getName());
             }
         }
     }
-
     private void setInvLvlField(int id) {
-        int index = -1;
         for (Part part : Inventory.getAllParts()) {
-            index++;
             if (part.getId() == id) {
                 inventoryInput.setText(String.valueOf(part.getStock()));
             }
         }
     }
-
     private void setPriceField(int id) {
-        int index = -1;
         for (Part part : Inventory.getAllParts()) {
-            index++;
             if (part.getId() == id) {
                 priceInput.setText(String.valueOf(part.getPrice()));
             }
         }
     }
-
     private void setMaxField(int id) {
-        int index = -1;
         for (Part part : Inventory.getAllParts()) {
-            index++;
             if (part.getId() == id) {
                 maxInput.setText(String.valueOf(part.getMax()));
             }
         }
     }
-
     private void setMinField(int id) {
-        int index = -1;
         for (Part part : Inventory.getAllParts()) {
-            index++;
             if (part.getId() == id) {
                 minInput.setText(String.valueOf(part.getMin()));
 
             }
         }
     }
-
     private void setMachineIdField(int id) {
-        int index = -1;
         for (Part part : Inventory.getAllParts()) {
-            index++;
             if (part.getId() == id) {
                 if (part instanceof InHouse) {
                     machineIDInput.setText(String.valueOf(((InHouse) part).getMachineID()));
@@ -144,7 +119,6 @@ public class ModifyPartController {
             }
         }
     }
-
     public void openMainForm(ActionEvent event) throws IOException {
         Parent mainWindow = FXMLLoader.load(getClass().getResource("mainForm.fxml"));
         Scene mainScene = new Scene(mainWindow);
@@ -153,70 +127,6 @@ public class ModifyPartController {
         window.show();
 
     }
-
-    public boolean nameValid() {
-        ObservableList<String> styleClass = nameInput.getStyleClass();
-        if (name.length() >= 2) {
-            styleClass.removeAll("error");
-            return true;
-        } else {
-            styleClass.add("error");
-            DataValidation.invalidNameAlert("part name");
-            return false;
-        }
-    }
-    public boolean inventoryValid(){
-        ObservableList<String> styleClass = inventoryInput.getStyleClass();
-        if (stockNum.) {
-            styleClass.removeAll("error");
-            return true;
-        } else {
-            styleClass.add("error");
-            DataValidation.invalidNameAlert("part name");
-            return false;
-        }
-    }
-
-    public boolean companyNameValid() {
-        ObservableList<String> CompStyleClass = machineIDInput.getStyleClass();
-        if (companyName.length() >= 2) {
-            CompStyleClass.removeAll("error");
-            return true;
-        } else {
-            CompStyleClass.add("error");
-            DataValidation.invalidStringAlert("Company name");
-            return false;
-        }
-    }
-
-    public boolean minLessThanMax() {
-        ObservableList<String> minStyleClass = minInput.getStyleClass();
-        ObservableList<String> maxStyleClass = maxInput.getStyleClass();
-        if (min < max) {
-            minStyleClass.removeAll("error");
-            maxStyleClass.removeAll("error");
-            return true;
-        } else {
-            minStyleClass.add("error");
-            maxStyleClass.add("error");
-            DataValidation.maxLessThanMin();
-            return false;
-        }
-    }
-
-    public boolean invBetweenMinMax() {
-
-        ObservableList<String> invStyleClass = inventoryInput.getStyleClass();
-        if (stockNum < max && stockNum > min) {
-            invStyleClass.removeAll("error");
-            return true;
-        } else {
-            invStyleClass.add("error");
-            DataValidation.invNotBetweenMinMaxAlert();
-            return false;
-        }
-    }
-
     public int findPartIndex(int id) {
         int index = -1;
         for (Part part : Inventory.getAllParts()) {
@@ -227,66 +137,168 @@ public class ModifyPartController {
         }
         return index;
     }
-
-
-
-
-
-
+    public boolean nameValid() {
+        if (name.length() >= 2) {
+            return true;
+        }else{
+            styleClass(nameInput).add("error");
+            DataValidation.invalidNameAlert("Part name");
+        }
+        return false;
+    }
+    public boolean priceValid(){
+        if(price > 0){
+            return true;
+        }else{
+            styleClass(priceInput).add("error");
+            DataValidation.invalidNumberAlert("Price value");
+        }
+        return false;
+    }
+    public boolean inventoryValid(){
+        if(stockNum > 0){
+            return true;
+        }else{
+            styleClass(inventoryInput).add("error");
+            DataValidation.invalidNumberAlert("Inventory value");
+        }
+        return false;
+    }
+    public boolean machineIDValid(){
+        if(machineID > 0){
+            return true;
+        }else{
+            styleClass(machineIDInput).add("error");
+            DataValidation.invalidNumberAlert("Machine ID value");
+        }
+        return false;
+    }
+    public boolean companyNameValid() {
+        if (name.length() >= 2) {
+            return true;
+        }else{
+            styleClass(machineIDInput).add("error");
+            DataValidation.invalidNameAlert("Company name");
+        }
+        return false;
+    }
+    public boolean minLessThanMax(){
+        min = Integer.parseInt(minInput.getText().trim());
+        max = Integer.parseInt(maxInput.getText().trim());
+        if(min < max){
+            return true;
+        }else{
+            styleClass(minInput).add("error");
+            styleClass(maxInput).add("error");
+            DataValidation.maxLessThanMin();
+            return false;
+        }
+    }
+    public boolean invBetweenMinMax(){
+        min = Integer.parseInt(minInput.getText().trim());
+        max = Integer.parseInt(maxInput.getText().trim());
+        stockNum = Integer.parseInt(inventoryInput.getText().trim());
+        if(stockNum < max && stockNum > min){
+            return true;
+        }else{
+            styleClass(inventoryInput).add("error");
+            DataValidation.invNotBetweenMinMaxAlert();
+            return false;
+        }
+    }
+    private ObservableList<String> styleClass(TextField field){
+        return field.getStyleClass();
+    }
+    private void removeAllErrorFlags(){
+        styleClass(nameInput).removeAll("error");
+        styleClass(inventoryInput).removeAll("error");
+        styleClass(priceInput).removeAll("error");
+        styleClass(minInput).removeAll("error");
+        styleClass(maxInput).removeAll("error");
+        styleClass(machineIDInput).removeAll("error");
+    }
     public void saveChangedPart(ActionEvent event) throws IOException {
+        removeAllErrorFlags();
         if (inHouseRadio.isSelected()) {
-            try {
-                name = nameInput.getText().trim();
-                nameValid();
+            name = nameInput.getText().trim();
+            try{
                 stockNum = Integer.parseInt(inventoryInput.getText().trim());
+            }catch (NumberFormatException e) {
+                styleClass(inventoryInput).add("error");
+                DataValidation.invalidNumberAlert("Inventory value");
+            }
+            try {
                 price = Double.parseDouble(priceInput.getText().trim());
+            }catch (NumberFormatException e){
+                styleClass(priceInput).add("error");
+                DataValidation.invalidNumberAlert("Price value");
+            }
+            try {
                 min = Integer.parseInt(minInput.getText().trim());
+            }catch (NumberFormatException e){
+                styleClass(minInput).add("error");
+                DataValidation.invalidNumberAlert("Minimum Inventory value");
+            }
+            try {
                 max = Integer.parseInt(maxInput.getText().trim());
+            }catch (NumberFormatException e){
+                styleClass(maxInput).add("error");
+                DataValidation.invalidNumberAlert("Maximum Inventory value");
+            }
+            try {
                 machineID = Integer.parseInt(machineIDInput.getText().trim());
-
-                if (nameValid() && minLessThanMax() && invBetweenMinMax()) {
-
+            }catch (NumberFormatException e){
+                styleClass(machineIDInput).add("error");
+                DataValidation.invalidNumberAlert("Machine ID value");
+            }
+                if (nameValid() && minLessThanMax() &&
+                        invBetweenMinMax() && priceValid()
+                && inventoryValid() && machineIDValid()) {
                     Part part = new InHouse(partID, name, price, stockNum, min, max, machineID);
                     Inventory.updatePart(findPartIndex(partID), part);
                     openMainForm(event);
                 }
-            } catch (NumberFormatException e) {
-                DataValidation.invalidDataAlert();
-            }
         } else {
-            try {
                 name = nameInput.getText().trim();
-                stockNum = Integer.parseInt(inventoryInput.getText().trim());
-                price = Double.parseDouble(priceInput.getText().trim());
-                min = Integer.parseInt(minInput.getText().trim());
-                max = Integer.parseInt(maxInput.getText().trim());
-                companyName = machineIDInput.getText().trim();
-                if (nameValid() && minLessThanMax() && invBetweenMinMax() && companyNameValid()) {
+                try{
+                    stockNum = Integer.parseInt(inventoryInput.getText().trim());
+                }catch (NumberFormatException e) {
+                    styleClass(inventoryInput).add("error");
+                    DataValidation.invalidNumberAlert("Inventory value");
+                }
+                try {
+                    price = Double.parseDouble(priceInput.getText().trim());
+                }catch (NumberFormatException e){
+                    styleClass(priceInput).add("error");
+                    DataValidation.invalidNumberAlert("Price value");
+                }
+                try {
+                    min = Integer.parseInt(minInput.getText().trim());
+                }catch (NumberFormatException e){
+                    styleClass(minInput).add("error");
+                    DataValidation.invalidNumberAlert("Minimum Inventory value");
+                }
+                try {
+                    max = Integer.parseInt(maxInput.getText().trim());
+                }catch (NumberFormatException e){
+                    styleClass(maxInput).add("error");
+                    DataValidation.invalidNumberAlert("Maximum Inventory value");
+                }
+                try {
+                    companyName = machineIDInput.getText().trim();
+                }catch (NumberFormatException e){
+                    styleClass(machineIDInput).add("error");
+                    DataValidation.invalidNumberAlert("Company name");
+                }
+                if (nameValid() && minLessThanMax() &&
+                        invBetweenMinMax() && companyNameValid()
+                && priceValid() && inventoryValid()) {
                     Part part = new Outsourced(partID, name, price, stockNum, min, max, companyName);
                     Inventory.updatePart(findPartIndex(partID), part);
                     openMainForm(event);
                 }
-            } catch (NumberFormatException e) {
-                DataValidation.invalidDataAlert();
-            }
         }
     }
-
-
-
-
-
-
-
-    /*public void saveModifiedPart(ActionEvent event) throws IOException {
-        if(partCreated) {
-            Inventory.updatePart(findPartIndex(partID), getChangedPart());
-            openMainForm(event);
-        }else{
-            DataValidation.invalidDataAlert();
-        }
-    }*/
-
     public void initialize(){
         isInHousePart(partID);
         iDInput.setText(String.valueOf(partID));

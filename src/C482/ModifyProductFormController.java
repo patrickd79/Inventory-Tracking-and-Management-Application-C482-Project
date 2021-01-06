@@ -14,7 +14,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class ModifyProductFormController {
@@ -24,15 +23,15 @@ public class ModifyProductFormController {
     @FXML
     private TextField modProductIDInput;
     @FXML
-    private TextField modProductNameInput;
+    private TextField nameInput;
     @FXML
-    private TextField modProductInvInput;
+    private TextField inventoryInput;
     @FXML
-    private TextField modProductPriceInput;
+    private TextField priceInput;
     @FXML
-    private TextField modProductMaxInput;
+    private TextField maxInput;
     @FXML
-    private TextField modProductMinInput;
+    private TextField minInput;
     @FXML
     private TableView<Part> modProdAllPartsTable;
     @FXML
@@ -58,7 +57,11 @@ public class ModifyProductFormController {
     public ObservableList<Part> pendingAssociatedParts = thisProduct.getAllAssociatedParts();
     public ObservableList<Part> tempAssociatedParts = FXCollections.observableArrayList();
     public Product newProduct;
-
+    private String name;
+    private int stockNum;
+    private double price;
+    private int min;
+    private int max;
     public void getPartsSearchResults(ActionEvent event) throws IOException{
         String name = modProductSearch.getText();
         ObservableList<Part> parts = searchPartNameResultsList(name);
@@ -91,19 +94,19 @@ public class ModifyProductFormController {
         }
     }
     private void setNameField(Product thisProduct) {
-            modProductNameInput.setText(thisProduct.getName());
+            nameInput.setText(thisProduct.getName());
         }
     private void setPriceField(Product thisProduct) {
-            modProductPriceInput.setText(String.valueOf(thisProduct.getPrice()));
+            priceInput.setText(String.valueOf(thisProduct.getPrice()));
         }
     private void setInvLvlField(Product thisProduct) {
-            modProductInvInput.setText(String.valueOf(thisProduct.getStock()));
+            inventoryInput.setText(String.valueOf(thisProduct.getStock()));
         }
     private void setMinField(Product thisProduct) {
-            modProductMinInput.setText(String.valueOf(thisProduct.getMin()));
+            minInput.setText(String.valueOf(thisProduct.getMin()));
         }
     private void setMaxField(Product thisProduct) {
-            modProductMaxInput.setText(String.valueOf(thisProduct.getMax()));
+            maxInput.setText(String.valueOf(thisProduct.getMax()));
         }
     public void openMainForm(ActionEvent event) throws IOException {
         Parent mainWindow = FXMLLoader.load(getClass().getResource("mainForm.fxml"));
@@ -115,19 +118,117 @@ public class ModifyProductFormController {
     public void cancelBtn(ActionEvent event) throws IOException{
         openMainForm(event);
     }
-    public Product getChangedProd() {
-        String prodName = modProductNameInput.getText().trim();
-        int prodStockNum = Integer.parseInt(modProductInvInput.getText().trim());
-        double prodPrice = Double.parseDouble(modProductPriceInput.getText().trim());
-        int prodMin = Integer.parseInt(modProductMinInput.getText().trim());
-        int prodMax = Integer.parseInt(modProductMaxInput.getText().trim());
-         newProduct= new Product(prodID,
-                prodName,
-                prodPrice,
-                prodStockNum,
-                prodMin,
-                prodMax);
-         return newProduct;
+    public boolean nameValid() {
+        if (name.length() >= 2) {
+            return true;
+        }else{
+            styleClass(nameInput).add("error");
+            DataValidation.invalidNameAlert("Part name");
+        }
+        return false;
+    }
+    public boolean priceValid(){
+        if(price > 0){
+            return true;
+        }else{
+            styleClass(priceInput).add("error");
+            DataValidation.invalidNumberAlert("Price value");
+        }
+        return false;
+    }
+    public boolean inventoryValid(){
+        if(stockNum > 0){
+            return true;
+        }else{
+            styleClass(inventoryInput).add("error");
+            DataValidation.invalidNumberAlert("Inventory value");
+        }
+        return false;
+    }
+    public boolean minLessThanMax(){
+        min = Integer.parseInt(minInput.getText().trim());
+        max = Integer.parseInt(maxInput.getText().trim());
+        if(min < max){
+            return true;
+        }else{
+            styleClass(minInput).add("error");
+            styleClass(maxInput).add("error");
+            DataValidation.maxLessThanMin();
+            return false;
+        }
+    }
+    public boolean invBetweenMinMax(){
+        min = Integer.parseInt(minInput.getText().trim());
+        max = Integer.parseInt(maxInput.getText().trim());
+        stockNum = Integer.parseInt(inventoryInput.getText().trim());
+        if(stockNum < max && stockNum > min){
+            return true;
+        }else{
+            styleClass(inventoryInput).add("error");
+            DataValidation.invNotBetweenMinMaxAlert();
+            return false;
+        }
+    }
+    private ObservableList<String> styleClass(TextField field){
+        return field.getStyleClass();
+    }
+    private void removeAllErrorFlags(){
+        styleClass(nameInput).removeAll("error");
+        styleClass(inventoryInput).removeAll("error");
+        styleClass(priceInput).removeAll("error");
+        styleClass(minInput).removeAll("error");
+        styleClass(maxInput).removeAll("error");
+    }
+    public void getChangedProd(ActionEvent event) throws IOException  {
+        removeAllErrorFlags();
+        name = nameInput.getText().trim();
+        if (nameValid()) {
+            styleClass(nameInput).remove("error");
+        }else {
+            styleClass(nameInput).add("error");
+            DataValidation.invalidNameAlert("Product name");
+        }
+        try{
+            stockNum = Integer.parseInt(inventoryInput.getText().trim());
+        }catch (NumberFormatException e) {
+            styleClass(inventoryInput).add("error");
+            DataValidation.invalidNumberAlert("Inventory value");
+        }
+            try {
+                price = Double.parseDouble(priceInput.getText().trim());
+            } catch (NumberFormatException e) {
+                styleClass(priceInput).add("error");
+                DataValidation.invalidNumberAlert("Price value");
+            }
+        try {
+            min = Integer.parseInt(minInput.getText().trim());
+        }catch (NumberFormatException e){
+            styleClass(minInput).add("error");
+            DataValidation.invalidNumberAlert("Minimum Inventory value");
+        }
+        try {
+            max = Integer.parseInt(maxInput.getText().trim());
+        }catch (NumberFormatException e){
+            styleClass(maxInput).add("error");
+            DataValidation.invalidNumberAlert("Maximum Inventory value");
+        }
+        if (nameValid() && minLessThanMax() &&
+                invBetweenMinMax() && priceValid()
+            && inventoryValid()) {
+            newProduct = new Product(prodID,
+                    name,
+                    price,
+                    stockNum,
+                    min,
+                    max);
+            tempAssociatedParts.addAll(pendingAssociatedParts);
+            Inventory.updateProduct(findProductIndex(prodID), newProduct);
+            for(Part part:tempAssociatedParts){
+                newProduct.addAssociatedPart(part);
+            }
+            openMainForm(event);
+        }
+
     }
     public int findProductIndex(int id){
         int index = -1;
@@ -138,7 +239,7 @@ public class ModifyProductFormController {
         }
         return index;
     }
-    public void saveModifiedProduct(ActionEvent event) throws IOException {
+    /*public void saveModifiedProduct(ActionEvent event) throws IOException {
         tempAssociatedParts.addAll(pendingAssociatedParts);
         getChangedProd();
         Inventory.updateProduct(findProductIndex(prodID), newProduct);
@@ -146,7 +247,7 @@ public class ModifyProductFormController {
             newProduct.addAssociatedPart(part);
         }
         openMainForm(event);
-    }
+    }*/
     public void initialize(){
         modProductIDInput.setText(String.valueOf(prodID));
         setNameField(thisProduct);
