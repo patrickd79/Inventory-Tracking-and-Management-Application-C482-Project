@@ -5,7 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- *
+ *Contains methods and data necessary to create a Product, such as constructors, setters, and getters.
  * @author Patrick Denney
  */
 public class Product {
@@ -26,93 +26,103 @@ public class Product {
     }
 
     /**
-     * @return the id
+     * @return the product id
      */
     public int getId() {
         return id;
     }
 
     /**
-     * @param id the id to set
+     * @param id the product id to set
      */
     public void setId(int id) {
         this.id = id;
     }
 
     /**
-     * @return the name
+     * @return the product name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @param name the name to set
+     * @param name the product name to set
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * @return the price
+     * @return the product price
      */
     public double getPrice() {
         return price;
     }
 
     /**
-     * @param price the price to set
+     * @param price the product price to set
      */
     public void setPrice(double price) {
         this.price = price;
     }
 
     /**
-     * @return the stock
+     * @return the product stock level
      */
     public int getStock() {
         return stock;
     }
 
     /**
-     * @param stock the stock to set
+     * @param stock the product stock level to set
      */
     public void setStock(int stock) {
         this.stock = stock;
     }
 
     /**
-     * @return the min
+     * @return the product min inventory level
      */
     public int getMin() {
         return min;
     }
 
     /**
-     * @param min the min to set
+     * @param min the product min inventory level to set
      */
     public void setMin(int min) {
         this.min = min;
     }
 
     /**
-     * @return the max
+     * @return the product max inventory level
      */
     public int getMax() {
         return max;
     }
 
     /**
-     * @param max the max to set
+     * @param max the product max inventory level to set
      */
     public void setMax(int max) {
         this.max = max;
     }
 
+    /**
+     *
+     * @param part part to add to the list of parts associated with the product in question.
+     */
     public void addAssociatedPart(Part part){
         associatedParts.add(part);
     }
 
+    /**
+     *
+     * @param selectedAssociatedPart part selected to be deleted from list of associated parts
+     * for the product in question
+     * @return true if part contained in the list and removes the part, false if not in the list.
+     */
     public boolean deleteAssociatedPart(Part selectedAssociatedPart){
         if (associatedParts.contains(selectedAssociatedPart)){
             associatedParts.remove(selectedAssociatedPart);
@@ -121,6 +131,10 @@ public class Product {
         return false;
     }
 
+    /**
+     *
+     * @return all associated parts in the list for the product in question
+     */
     public ObservableList<Part> getAllAssociatedParts(){
         return associatedParts;
     }

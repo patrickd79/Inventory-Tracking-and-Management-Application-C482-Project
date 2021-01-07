@@ -12,8 +12,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
 
+/***
+ * This Class contains the methods and data that create parts from the Part Class
+ * @author Patrick Denney
+ */
 public class AddPartController {
-
     @FXML
     private TextField nameInput;
     @FXML
@@ -39,6 +42,11 @@ public class AddPartController {
     public int machineID;
     public String companyName = "";
     private boolean partCreated = false;
+
+    /***
+     *
+     * @return checks all the parts in inventory, and if any exist, returns the largest ID number
+     */
     public int highestPartId(){
         int largestID = 0;
         for (Part part: Inventory.getAllParts()){
@@ -48,6 +56,12 @@ public class AddPartController {
         }
         return largestID;
     }
+
+    /***
+     *
+     * @return if there are no parts in inventory, returns 0,
+     *      if not then adds one to the highest part ID present and returns that as the partID.
+     */
     private int partIDGenerator() {
         if(Inventory.getAllParts() == null){
             partID = 0;
@@ -56,6 +70,12 @@ public class AddPartController {
         }
         return partID;
     }
+
+    /***
+     * takes user back to main form, such as when cancel btn, or save btn is clicked.
+     * @param event
+     * @throws IOException
+     */
     public void openMainForm(ActionEvent event) throws IOException {
         Parent mainWindow = FXMLLoader.load(getClass().getResource("mainForm.fxml"));
         Scene mainScene = new Scene(mainWindow);
@@ -63,6 +83,12 @@ public class AddPartController {
         window.setScene(mainScene);
         window.show();
     }
+
+    /***
+     * Dictates behavior when cancel btn is clicked, shows a confirmation dialog, and takes user to main form if confirmed.
+     * @param event
+     * @throws IOException
+     */
     public void cancelBtn(ActionEvent event) throws IOException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to leave this screen and lose all entered data?");
         Optional<ButtonType> result = alert.showAndWait();
@@ -70,8 +96,13 @@ public class AddPartController {
             openMainForm(event);
         }
     }
+
+    /***
+     *
+     * @return Returns true if the name input contains valid data. If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean nameValid() {
-       if (name.length() >= 2) {
+       if (name.length() >= 1) {
            return true;
        }else{
            styleClass(nameInput).add("error");
@@ -79,8 +110,13 @@ public class AddPartController {
        }
         return false;
     }
+
+    /***
+     *
+     * @return Returns true if the price input contains valid data. If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean priceValid(){
-        if(price > 0){
+        if(price >= 0){
             return true;
         }else{
             styleClass(priceInput).add("error");
@@ -88,6 +124,11 @@ public class AddPartController {
         }
         return false;
     }
+
+    /***
+     *
+     * @return Returns true if the inventory input contains valid data. If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean inventoryValid(){
         if(stockNum > 0){
             return true;
@@ -97,6 +138,11 @@ public class AddPartController {
         }
         return false;
     }
+
+    /***
+     *
+     * @return Returns true if the machine ID input contains valid data. If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean machineIDValid(){
         if(machineID > 0){
             return true;
@@ -106,8 +152,13 @@ public class AddPartController {
         }
         return false;
     }
+
+    /***
+     *
+     * @return Returns true if the company name input contains valid data. If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean companyNameValid() {
-        if (name.length() >= 2) {
+        if (companyName.length() >= 1) {
             return true;
         }else{
             styleClass(machineIDInput).add("error");
@@ -115,6 +166,11 @@ public class AddPartController {
         }
         return false;
     }
+
+    /***
+     *
+     * @return Returns true if the minimum stock level is less than the Max stock level. Returns false if not, and displays an error message.
+     */
     public boolean minLessThanMax(){
         min = Integer.parseInt(minInput.getText().trim());
         max = Integer.parseInt(maxInput.getText().trim());
@@ -127,6 +183,11 @@ public class AddPartController {
             return false;
         }
     }
+
+    /***
+     *
+     * @return Returns true if the inventory stock level is between than the max and min stock level. Returns false if not, and displays an error message.
+     */
     public boolean invBetweenMinMax(){
         min = Integer.parseInt(minInput.getText().trim());
         max = Integer.parseInt(maxInput.getText().trim());
@@ -139,9 +200,19 @@ public class AddPartController {
             return false;
         }
     }
+
+    /**
+     * This allows for a simple method to change the input field style on an error, to red and back again.
+     * @param field The text field targeted
+     * @return the field targeted styles class attribute
+     */
     private ObservableList<String> styleClass(TextField field){
         return field.getStyleClass();
     }
+
+    /**
+     * Removes the red error style from all the text fields, when reattempting to save data.
+     */
     private void removeAllErrorFlags(){
         styleClass(nameInput).removeAll("error");
         styleClass(inventoryInput).removeAll("error");
@@ -150,7 +221,17 @@ public class AddPartController {
         styleClass(maxInput).removeAll("error");
         styleClass(machineIDInput).removeAll("error");
     }
+
+    /***
+     *  Takes data from the input fields and validates it. If all data is valid, creates a new In House Part.
+     */
     public void addInHousePart(){
+        name = "";
+        price = 0;
+        min = 0;
+        max = 0;
+        stockNum = 0;
+        machineID = 0;
         removeAllErrorFlags();
         name = nameInput.getText().trim();
         try{
@@ -192,7 +273,16 @@ public class AddPartController {
                 }
 
         }
+    /***
+     *  Takes data from the input fields and validates it. If all data is valid, creates a new Outsourced Part.
+     */
     public void addOutsourcedPart() {
+        name = "";
+        price = 0;
+        min = 0;
+        max = 0;
+        stockNum = 0;
+        companyName = "";
         removeAllErrorFlags();
         name = nameInput.getText().trim();
         try{
@@ -233,6 +323,10 @@ public class AddPartController {
                     partCreated = false;
                 }
     }
+
+    /***
+     * Checks if in house or outsourced is selected, then adjusts the label and prompt text on the machine ID text field.
+     */
     public void inHouseOrOutsourced(){
         if(!inHouseRadio.isSelected()){
             machineIDInput.clear();
@@ -243,6 +337,12 @@ public class AddPartController {
             machineIDCompNameLabel.setText("Machine ID");
         }
     }
+
+    /**
+     * Checks if in house or outsourced part to be created and calls corresponding method to create part, if successful then takes user back to main form.
+     * @param event on click of the save btn.
+     * @throws IOException
+     */
     public void savePart(ActionEvent event) throws IOException{
         if (inHouseRadio.isSelected()) {
             addInHousePart();

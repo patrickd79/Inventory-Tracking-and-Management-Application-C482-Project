@@ -7,13 +7,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Optional;
 
+/***
+ * This Class contains the methods and data that modify parts from the Part Class
+ * @author Patrick Denney
+ */
 public class ModifyPartController {
     @FXML
     private RadioButton inHouseRadio;
@@ -43,9 +46,16 @@ public class ModifyPartController {
     private int machineID;
     String companyName;
     private int partID = MainFormController.partModId;
-    public boolean inHouse(int id) {
+    private Part thisPart = Inventory.lookupPart(partID);
+    private boolean partModified = false;
+    /**
+     * Checks to see if the current part is an in house part or outsourced.
+     * @param thisPart part to be checked ID number.
+     * @return true if in house part, false if outsourced part.
+     */
+    public boolean inHouse(Part thisPart) {
         for (Part part : Inventory.getAllParts()) {
-            if (part.getId() == id) {
+            if (part.getId() == thisPart.getId()) {
                 if (part instanceof InHouse) {
                     return true;
                 }
@@ -53,8 +63,14 @@ public class ModifyPartController {
         }
         return false;
     }
-    private void isInHousePart(int id) {
-        if (inHouse(id)) {
+    /**
+     * If is an in house part the sets radio btn to in house
+     * if outsourced part, then sets outsourced radio btn to selected and
+     * changes machine ID label to company name and changes prompt text of machine ID input.
+     * @param thisPart part currently being modified
+     */
+    private void isInHousePart(Part thisPart) {
+        if (inHouse(thisPart)) {
             inHouseRadio.setSelected(true);
         } else {
             outsourcedRadio.setSelected(true);
@@ -63,6 +79,11 @@ public class ModifyPartController {
 
         }
     }
+    /**
+     * This allows the user to select either the in house or outsourced radio button to modify the part
+     * from being one type to the other.
+     * @param event selecting the radio btns
+     */
     @FXML
     private void changeTypeOfPart(ActionEvent event) {
         if (inHouseRadio.isSelected()) {
@@ -71,54 +92,59 @@ public class ModifyPartController {
             machineIDCompNameLabel.setText("Company Name");
         }
     }
-    private void setNameField(int id) {
-        for (Part part : Inventory.getAllParts()) {
-            if (part.getId() == id) {
-                nameInput.setText(part.getName());
-            }
-        }
+    /**
+     * Sets the name input field with the original part name upon loading the page.
+     * @param thisPart the original part to be modified
+     */
+    private void setNameField(Part thisPart) {
+        nameInput.setText(thisPart.getName());
     }
-    private void setInvLvlField(int id) {
-        for (Part part : Inventory.getAllParts()) {
-            if (part.getId() == id) {
-                inventoryInput.setText(String.valueOf(part.getStock()));
-            }
-        }
+    /**
+     * Sets the inventory input field with the original part inventory level upon loading the page.
+     * @param thisPart the original part to be modified
+     */
+    private void setInvLvlField(Part thisPart) {
+        inventoryInput.setText(String.valueOf(thisPart.getStock()));
     }
-    private void setPriceField(int id) {
-        for (Part part : Inventory.getAllParts()) {
-            if (part.getId() == id) {
-                priceInput.setText(String.valueOf(part.getPrice()));
-            }
-        }
-    }
-    private void setMaxField(int id) {
-        for (Part part : Inventory.getAllParts()) {
-            if (part.getId() == id) {
-                maxInput.setText(String.valueOf(part.getMax()));
-            }
-        }
-    }
-    private void setMinField(int id) {
-        for (Part part : Inventory.getAllParts()) {
-            if (part.getId() == id) {
-                minInput.setText(String.valueOf(part.getMin()));
 
-            }
+        /**
+         * Sets the price input field with the original part price upon loading the page.
+         * @param thisPart the original part to be modified
+         */
+        private void setPriceField(Part thisPart) {
+            priceInput.setText(String.valueOf(thisPart.getPrice()));
+        }
+    /**
+     * Sets the max input field with the original part max upon loading the page.
+     * @param thisPart the original part to be modified
+     */
+    private void setMaxField(Part thisPart) {
+        maxInput.setText(String.valueOf(thisPart.getMax()));
+    }
+    /**
+     * Sets the min input field with the original part min upon loading the page.
+     * @param thisPart the original part to be modified
+     */
+    private void setMinField(Part thisPart) {
+        minInput.setText(String.valueOf(thisPart.getMin()));
+    }
+    /**
+     * Sets the machine ID input field with the original part machine ID or company name upon loading the page.
+     * @param thisPart the original part to be modified
+     */
+    private void setMachineIdField(Part thisPart) {
+        if (thisPart instanceof InHouse) {
+            machineIDInput.setText(String.valueOf(((InHouse) thisPart).getMachineID()));
+        } else {
+            machineIDInput.setText(((Outsourced) thisPart).getCompanyName());
         }
     }
-    private void setMachineIdField(int id) {
-        for (Part part : Inventory.getAllParts()) {
-            if (part.getId() == id) {
-                if (part instanceof InHouse) {
-                    machineIDInput.setText(String.valueOf(((InHouse) part).getMachineID()));
-                } else {
-                    machineIDInput.setText(String.valueOf(((Outsourced) part).getCompanyName()));
 
-                }
-            }
-        }
-    }
+    /***
+     * takes user back to main form, such as when cancel btn, or save btn is clicked.
+     * @param event
+     * @throws IOException
+     */
     public void openMainForm(ActionEvent event) throws IOException {
         Parent mainWindow = FXMLLoader.load(getClass().getResource("mainForm.fxml"));
         Scene mainScene = new Scene(mainWindow);
@@ -127,18 +153,41 @@ public class ModifyPartController {
         window.show();
 
     }
-    public int findPartIndex(int id) {
+    /***
+     * Dictates behavior when cancel btn is clicked, shows a confirmation dialog,
+     * and takes user to main form if confirmed.
+     * @param event
+     * @throws IOException
+     */
+    public void cancelBtn(ActionEvent event) throws IOException{
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to leave this screen and lose all entered data?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            openMainForm(event);
+        }
+    }
+    /**
+     *
+     * @param thisPart the ID number of the part to be modified
+     * @return the index position of the part in the Inventory list.
+     */
+    public int findPartIndex(Part thisPart) {
         int index = -1;
         for (Part part : Inventory.getAllParts()) {
-            if (part.getId() == id) {
+            if (part.getId() == thisPart.getId()) {
                 index = Inventory.getAllParts().indexOf(part);
 
             }
         }
         return index;
     }
+    /***
+     *
+     * @return Returns true if the name input contains valid data.
+     * If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean nameValid() {
-        if (name.length() >= 2) {
+        if (name.length() >=1) {
             return true;
         }else{
             styleClass(nameInput).add("error");
@@ -146,8 +195,15 @@ public class ModifyPartController {
         }
         return false;
     }
+    /***
+     *
+     * @return Returns true if the price input contains valid data.
+     * If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean priceValid(){
-        if(price > 0){
+        if(priceInput.getText() == null){
+            return false;
+        }else if(price >= 0){
             return true;
         }else{
             styleClass(priceInput).add("error");
@@ -155,8 +211,13 @@ public class ModifyPartController {
         }
         return false;
     }
+    /***
+     *
+     * @return Returns true if the inventory input contains valid data.
+     * If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean inventoryValid(){
-        if(stockNum > 0){
+        if(stockNum >= 0){
             return true;
         }else{
             styleClass(inventoryInput).add("error");
@@ -164,6 +225,11 @@ public class ModifyPartController {
         }
         return false;
     }
+    /***
+     *
+     * @return Returns true if the machineID input contains valid data.
+     * If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean machineIDValid(){
         if(machineID > 0){
             return true;
@@ -173,8 +239,13 @@ public class ModifyPartController {
         }
         return false;
     }
+    /***
+     *
+     * @return Returns true if the company name input contains valid data.
+     * If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean companyNameValid() {
-        if (name.length() >= 2) {
+        if (companyName.length() >= 1) {
             return true;
         }else{
             styleClass(machineIDInput).add("error");
@@ -182,6 +253,11 @@ public class ModifyPartController {
         }
         return false;
     }
+    /***
+     *
+     * @return Returns true if the min input is less than max input field.
+     * If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean minLessThanMax(){
         min = Integer.parseInt(minInput.getText().trim());
         max = Integer.parseInt(maxInput.getText().trim());
@@ -194,6 +270,11 @@ public class ModifyPartController {
             return false;
         }
     }
+    /***
+     *
+     * @return Returns true if the inventory value is between the min and max input values.
+     * If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean invBetweenMinMax(){
         min = Integer.parseInt(minInput.getText().trim());
         max = Integer.parseInt(maxInput.getText().trim());
@@ -206,9 +287,17 @@ public class ModifyPartController {
             return false;
         }
     }
+    /**
+     * This allows for a simple method to change the input field style on an error, to red and back again.
+     * @param field The text field targeted
+     * @return the field targeted styles class attribute
+     */
     private ObservableList<String> styleClass(TextField field){
         return field.getStyleClass();
     }
+    /**
+     * Removes the red error style from all the text fields, when reattempting to save data.
+     */
     private void removeAllErrorFlags(){
         styleClass(nameInput).removeAll("error");
         styleClass(inventoryInput).removeAll("error");
@@ -217,9 +306,18 @@ public class ModifyPartController {
         styleClass(maxInput).removeAll("error");
         styleClass(machineIDInput).removeAll("error");
     }
+    /***
+     *  Takes data from the input fields and validates it. If all data is valid, modifies the original part with the new data.
+     */
     public void saveChangedPart(ActionEvent event) throws IOException {
         removeAllErrorFlags();
         if (inHouseRadio.isSelected()) {
+            name = "";
+            price = 0;
+            min = 0;
+            max = 0;
+            stockNum = 0;
+            machineID = 0;
             name = nameInput.getText().trim();
             try{
                 stockNum = Integer.parseInt(inventoryInput.getText().trim());
@@ -255,10 +353,18 @@ public class ModifyPartController {
                         invBetweenMinMax() && priceValid()
                 && inventoryValid() && machineIDValid()) {
                     Part part = new InHouse(partID, name, price, stockNum, min, max, machineID);
-                    Inventory.updatePart(findPartIndex(partID), part);
-                    openMainForm(event);
+                    Inventory.updatePart(findPartIndex(thisPart), part);
+                    partModified = true;
+                }else {
+                    partModified = false;
                 }
         } else {
+            name = "";
+            price = 0;
+            min = 0;
+            max = 0;
+            stockNum = 0;
+            companyName = "";
                 name = nameInput.getText().trim();
                 try{
                     stockNum = Integer.parseInt(inventoryInput.getText().trim());
@@ -286,7 +392,7 @@ public class ModifyPartController {
                 }
                 try {
                     companyName = machineIDInput.getText().trim();
-                }catch (NumberFormatException e){
+                }catch (Exception e){
                     styleClass(machineIDInput).add("error");
                     DataValidation.invalidNumberAlert("Company name");
                 }
@@ -294,20 +400,28 @@ public class ModifyPartController {
                         invBetweenMinMax() && companyNameValid()
                 && priceValid() && inventoryValid()) {
                     Part part = new Outsourced(partID, name, price, stockNum, min, max, companyName);
-                    Inventory.updatePart(findPartIndex(partID), part);
-                    openMainForm(event);
+                    Inventory.updatePart(findPartIndex(thisPart), part);
+                    partModified = true;
+                }else {
+                    partModified = false;
                 }
         }
+        if(partModified){
+            openMainForm(event);
+        }
     }
+    /**
+     * Sets the input fields using the original part data.
+     */
     public void initialize(){
-        isInHousePart(partID);
-        iDInput.setText(String.valueOf(partID));
-        setNameField(partID);
-        setInvLvlField(partID);
-        setPriceField(partID);
-        setMaxField(partID);
-        setMinField(partID);
-        setMachineIdField(partID);
+        isInHousePart(thisPart);
+        iDInput.setText(String.valueOf(thisPart.getId()));
+        setNameField(thisPart);
+        setInvLvlField(thisPart);
+        setPriceField(thisPart);
+        setMaxField(thisPart);
+        setMinField(thisPart);
+        setMachineIdField(thisPart);
 
     }
 

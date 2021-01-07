@@ -8,14 +8,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import java.io.IOException;
 
+import java.io.IOException;
+import java.util.Optional;
+
+/***
+ * This Class contains the methods and data that modify products from the Product Class
+ * @author Patrick Denney
+ */
 public class ModifyProductFormController {
 
     @FXML
@@ -62,22 +65,40 @@ public class ModifyProductFormController {
     private double price;
     private int min;
     private int max;
+    /**
+     * When user presses enter after entering in search term, loads parts that match search criteria.
+     * data is supplied from the searchPartNameResultsList method
+     * @param event
+     * @throws IOException
+     */
     public void getPartsSearchResults(ActionEvent event) throws IOException{
         String name = modProductSearch.getText();
         ObservableList<Part> parts = searchPartNameResultsList(name);
         modProdAllPartsTable.setItems(parts);
         modProductSearch.setText("");
     }
+    /**
+     *
+     * @param searchStr user input into search field
+     * @return returns a list of parts matching the search term
+     */
     public ObservableList<Part> searchPartNameResultsList(String searchStr){
         ObservableList<Part> results = FXCollections.observableArrayList();
         ObservableList<Part> allParts = Inventory.getAllParts();
         for(Part part: allParts){
-            if(part.getName().contains(searchStr)){
+            if(part.getName().contains(searchStr) || part.getId() == (Integer.parseInt(searchStr))){
                 results.add(part);
+            }else{
+                DataValidation.partOrProductNotFound("part");
             }
         }
         return results;
     }
+    /***
+     * When user clicks add btn, this adds the selected parts to pendingAssociatedParts list.
+     * @param event
+     * @throws IOException
+     */
     public void addAssociatedParts(ActionEvent event) throws IOException{
         ObservableList<Part> selectedPart;
         selectedPart = modProdAllPartsTable.getSelectionModel().getSelectedItems();
@@ -85,6 +106,11 @@ public class ModifyProductFormController {
             thisProduct.addAssociatedPart(part);
         }
     }
+    /***
+     * When user clicks remove btn, this removes the selected parts from the pendingAssociatedParts list.
+     * @param event
+     * @throws IOException
+     */
     public void removeAssociatedParts(ActionEvent event) throws IOException {
         ObservableList<Part> selectedPartForRemove;
         selectedPartForRemove = modProdAssociatedPartsTable.getSelectionModel().getSelectedItems();
@@ -93,21 +119,46 @@ public class ModifyProductFormController {
             thisProduct.deleteAssociatedPart(part);
         }
     }
+    /**
+     * Sets the name input field with the original product name upon loading the page.
+     * @param thisProduct the original product to be modified
+     */
     private void setNameField(Product thisProduct) {
             nameInput.setText(thisProduct.getName());
         }
+    /**
+     * Sets the price input field with the original product price upon loading the page.
+     * @param thisProduct the original product to be modified
+     */
     private void setPriceField(Product thisProduct) {
             priceInput.setText(String.valueOf(thisProduct.getPrice()));
         }
+    /**
+     * Sets the inventory input field with the original product inventory level upon loading the page.
+     * @param thisProduct the original product to be modified
+     */
     private void setInvLvlField(Product thisProduct) {
             inventoryInput.setText(String.valueOf(thisProduct.getStock()));
         }
+    /**
+     * Sets the min input field with the original product min inventory upon loading the page.
+     * @param thisProduct the original product to be modified
+     */
     private void setMinField(Product thisProduct) {
             minInput.setText(String.valueOf(thisProduct.getMin()));
         }
+    /**
+     * Sets the max input field with the original product max inventory upon loading the page.
+     * @param thisProduct the original product to be modified
+     */
     private void setMaxField(Product thisProduct) {
             maxInput.setText(String.valueOf(thisProduct.getMax()));
         }
+    /***
+     * takes user back to main form, such as when cancel btn, or save btn is clicked.
+     * @param event
+     * @throws IOException
+     */
     public void openMainForm(ActionEvent event) throws IOException {
         Parent mainWindow = FXMLLoader.load(getClass().getResource("mainForm.fxml"));
         Scene mainScene = new Scene(mainWindow);
@@ -115,9 +166,24 @@ public class ModifyProductFormController {
         window.setScene(mainScene);
         window.show();
     }
+    /***
+     * Dictates behavior when cancel btn is clicked, shows a confirmation dialog,
+     * and takes user to main form if confirmed.
+     * @param event
+     * @throws IOException
+     */
     public void cancelBtn(ActionEvent event) throws IOException{
-        openMainForm(event);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to leave this screen and lose all entered data?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            openMainForm(event);
+        }
     }
+    /***
+     *
+     * @return Returns true if the name input contains valid data.
+     * If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean nameValid() {
         if (name.length() >= 2) {
             return true;
@@ -127,17 +193,32 @@ public class ModifyProductFormController {
         }
         return false;
     }
+    /***
+     *
+     * @return Returns true if the price input contains valid data.
+     * If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean priceValid(){
-        if(price > 0){
+        double sumOfPartPrices = 0;
+        for(Part part: pendingAssociatedParts){
+            double partPrice = part.getPrice();
+            sumOfPartPrices += partPrice;
+        }
+        if(price >= sumOfPartPrices){
             return true;
         }else{
             styleClass(priceInput).add("error");
-            DataValidation.invalidNumberAlert("Price value");
+            DataValidation.prodPriceBelowSumOfPartsPricesAlert();
         }
         return false;
     }
+    /***
+     *
+     * @return Returns true if the inventory input contains valid data.
+     * If data is not valid, returns false, and displays an error dialog.
+     */
     public boolean inventoryValid(){
-        if(stockNum > 0){
+        if(stockNum >= 0){
             return true;
         }else{
             styleClass(inventoryInput).add("error");
@@ -145,6 +226,11 @@ public class ModifyProductFormController {
         }
         return false;
     }
+    /***
+     *
+     * @return Returns true if the minimum stock level is less than the Max stock level.
+     * Returns false if not, and displays an error message.
+     */
     public boolean minLessThanMax(){
         min = Integer.parseInt(minInput.getText().trim());
         max = Integer.parseInt(maxInput.getText().trim());
@@ -157,6 +243,11 @@ public class ModifyProductFormController {
             return false;
         }
     }
+    /***
+     *
+     * @return Returns true if the inventory stock level is between than the max and min stock level.
+     * Returns false if not, and displays an error message.
+     */
     public boolean invBetweenMinMax(){
         min = Integer.parseInt(minInput.getText().trim());
         max = Integer.parseInt(maxInput.getText().trim());
@@ -169,9 +260,17 @@ public class ModifyProductFormController {
             return false;
         }
     }
+    /**
+     * This allows for a simple method to change the input field style on an error, to red and back again.
+     * @param field The text field targeted
+     * @return the field targeted styles class attribute
+     */
     private ObservableList<String> styleClass(TextField field){
         return field.getStyleClass();
     }
+    /**
+     * Removes the red error style from all the text fields, when reattempting to save data.
+     */
     private void removeAllErrorFlags(){
         styleClass(nameInput).removeAll("error");
         styleClass(inventoryInput).removeAll("error");
@@ -179,7 +278,15 @@ public class ModifyProductFormController {
         styleClass(minInput).removeAll("error");
         styleClass(maxInput).removeAll("error");
     }
+    /***
+     *  Takes data from the input fields and validates it. If all data is valid, modifies the product with the new data.
+     */
     public void getChangedProd(ActionEvent event) throws IOException  {
+        name = "";
+        price = 0;
+        min = 0;
+        max = 0;
+        stockNum = 0;
         removeAllErrorFlags();
         name = nameInput.getText().trim();
         if (nameValid()) {
@@ -230,6 +337,11 @@ public class ModifyProductFormController {
         }
 
     }
+    /**
+     *
+     * @param id the ID number of the product to be modified
+     * @return the index position of the product in the Inventory list.
+     */
     public int findProductIndex(int id){
         int index = -1;
         for(Product product: Inventory.getAllProducts()) {
@@ -239,15 +351,10 @@ public class ModifyProductFormController {
         }
         return index;
     }
-    /*public void saveModifiedProduct(ActionEvent event) throws IOException {
-        tempAssociatedParts.addAll(pendingAssociatedParts);
-        getChangedProd();
-        Inventory.updateProduct(findProductIndex(prodID), newProduct);
-        for(Part part:tempAssociatedParts){
-            newProduct.addAssociatedPart(part);
-        }
-        openMainForm(event);
-    }*/
+    /**
+     * Loads data from parts inventory to the respective tables, so that they can be added or removed from the product.
+     * Also, sets the input fields using the original product data.
+     */
     public void initialize(){
         modProductIDInput.setText(String.valueOf(prodID));
         setNameField(thisProduct);

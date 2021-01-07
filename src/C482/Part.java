@@ -5,7 +5,7 @@ package C482;
  */
 
 /**
- *
+ *Contains methods and data necessary to create a Part, such as constructors, setters, and getters.
  * @author Patrick Denney
  */
 public abstract class Part {
@@ -15,6 +15,16 @@ public abstract class Part {
     private int stock;
     private int min;
     private int max;
+
+    /**
+     * Constructor function to create a Part
+     * @param id
+     * @param name
+     * @param price
+     * @param stock
+     * @param min
+     * @param max
+     */
     public Part(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
         this.name = name;

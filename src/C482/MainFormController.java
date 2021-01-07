@@ -17,6 +17,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * This is the Class that contains the methods and data for the main page
+ */
 public class MainFormController {
     @FXML
     private TextField prodSearchTF;
@@ -44,6 +47,10 @@ public class MainFormController {
     private TableColumn<Product, Double> productPriceColumn;
     public static int partModId = 0;
     public static int prodModId = 0;
+
+    /**
+     * loads any parts or products to the tables upon opening the main page
+     */
     public void initialize(){
             mainPartsTable.setItems(Inventory.getAllParts());
             partIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -59,6 +66,11 @@ public class MainFormController {
             productPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
             mainProductsTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
+
+    /**
+     *
+     * @return the ID number of the part to be modified, or deleted when a part is selected for modification
+     */
     public int partToModify(){
         ObservableList<Part> selectedPart;
         selectedPart = mainPartsTable.getSelectionModel().getSelectedItems();
@@ -67,6 +79,10 @@ public class MainFormController {
         }
         return partModId;
     }
+    /**
+     *
+     * @return the ID number of the product to be modified, or deleted when a product is selected for modification
+     */
     public int productToModify(){
         ObservableList<Product> selectedProduct;
         selectedProduct = mainProductsTable.getSelectionModel().getSelectedItems();
@@ -75,6 +91,10 @@ public class MainFormController {
         }
         return prodModId;
     }
+
+    /**
+     * deletes the selected part
+     */
     public void deleteSelectedPart() {
        partToModify();
        if (partModId != 0) {
@@ -91,6 +111,10 @@ public class MainFormController {
            DataValidation.pleaseMakeASelection("part");
        }
    }
+
+    /**
+     * deletes selected product
+     */
     public void deleteSelectedProduct() {
         productToModify();
         if (prodModId != 0) {
@@ -111,10 +135,20 @@ public class MainFormController {
             DataValidation.pleaseMakeASelection("product");
         }
     }
+
+    /**
+     * closes the application on the click of the exit button
+     */
     public void exitApplication(){
         System.out.println("Closing");
         System.exit(0);
     }
+
+    /**
+     * opens the add part form
+     * @param event clicking on the add part btn
+     * @throws IOException
+     */
     public void openAddPartForm(ActionEvent event) throws IOException {
         Parent addPartWindow = FXMLLoader.load(getClass().getResource("addPart.fxml"));
         Scene addPartScene = new Scene(addPartWindow);
@@ -124,6 +158,12 @@ public class MainFormController {
         window.show();
 
     }
+
+    /**
+     * opens the add product form
+     * @param event clicking on the add product btn
+     * @throws IOException
+     */
     public void openAddProductForm(ActionEvent event) throws IOException {
         Parent addProductWindow = FXMLLoader.load(getClass().getResource("addProductForm.fxml"));
         Scene addProductScene = new Scene(addProductWindow);
@@ -133,6 +173,12 @@ public class MainFormController {
         window.show();
 
     }
+
+    /**
+     * opens the modify part form
+     * @param event clicking on the modify part form
+     * @throws IOException
+     */
     public void openModPartForm(ActionEvent event) throws IOException {
         partToModify();
         if(partModId !=0) {
@@ -147,6 +193,12 @@ public class MainFormController {
             DataValidation.pleaseMakeASelection("part");
         }
     }
+
+    /**
+     * opens the modify product form
+     * @param event clicking on the modify product btn
+     * @throws IOException
+     */
     public void openModProductForm(ActionEvent event) throws IOException {
         productToModify();
         if(prodModId !=0) {
@@ -162,12 +214,23 @@ public class MainFormController {
         }
 
     }
+    /**
+     * When user presses enter after entering in search term, loads parts that match search criteria.
+     * data is supplied from the searchPartNameResultsList method
+     * @param event pressing enter after entering search term
+     * @throws IOException
+     */
     public void getPartsSearchResults(ActionEvent event) throws IOException{
         String name = partsSearchTF.getText();
         ObservableList<Part> parts = searchPartNameResultsList(name);
         mainPartsTable.setItems(parts);
         partsSearchTF.setText("");
     }
+    /**
+     *
+     * @param searchStr user input into search field
+     * @return returns a list of parts matching the search term
+     */
     public ObservableList<Part> searchPartNameResultsList(String searchStr){
         ObservableList<Part> results = FXCollections.observableArrayList();
         ObservableList<Part> allParts = Inventory.getAllParts();
@@ -178,6 +241,11 @@ public class MainFormController {
         }
         return results;
     }
+    /**
+     *
+     * @param searchStr user input into search field
+     * @return returns a list of products matching the search term
+     */
     public ObservableList<Product> searchProdNameResultsList(String searchStr){
         ObservableList<Product> results = FXCollections.observableArrayList();
         ObservableList<Product> allProds = Inventory.getAllProducts();
@@ -188,6 +256,12 @@ public class MainFormController {
         }
         return results;
     }
+    /**
+     * When user presses enter after entering in search term, loads products that match search criteria.
+     * data is supplied from the searchProdNameResultsList method
+     * @param event pressing enter after entering search term
+     * @throws IOException
+     */
     public void getProductSearchResults(ActionEvent event) throws IOException{
         String name = prodSearchTF.getText();
         ObservableList<Product> prod = searchProdNameResultsList(name);
