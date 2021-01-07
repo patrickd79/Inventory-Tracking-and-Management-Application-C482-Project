@@ -50,6 +50,11 @@ public class MainFormController {
 
     /**
      * loads any parts or products to the tables upon opening the main page
+     * <p>Got a runtime error at first due to a Null pointer exception, while trying to load the table.
+     * I finally realized by using the debugger that my variables for the @FXML components needed to be private
+     * to be prevent this. As for an updated version to extend functionality of the code, I think connecting it
+     * to a database, so that the objects created persisted, would be advisable. Also, maybe start with writing tests would
+     * probably make troubleshooting and development much faster. </p>
      */
     public void initialize(){
             mainPartsTable.setItems(Inventory.getAllParts());

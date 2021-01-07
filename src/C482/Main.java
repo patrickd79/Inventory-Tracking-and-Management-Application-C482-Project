@@ -6,6 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Main class for the application
+ */
 public class Main extends Application {
     public void start(Stage stage) throws Exception {
         // Load the FXML file
